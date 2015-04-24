@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import protocol.HttpRequest;
+import protocol.HttpRequestFactory;
 import protocol.HttpResponse;
 import protocol.HttpResponseFactory;
 import protocol.Protocol;
@@ -92,7 +93,7 @@ public class ConnectionHandler implements Runnable {
 		HttpRequest request = null;
 		HttpResponse response = null;
 		try {
-			request = HttpRequest.read(inStream);
+			request = HttpRequestFactory.read(inStream);
 			System.out.println(request);
 		}
 		catch(ProtocolException pe) {

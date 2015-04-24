@@ -1,0 +1,25 @@
+F1 - Redesign:
+Logan:
+Abstract HTTPRequest and create new classes
+Add HTTPRequestFactory with map
+
+Lindsey:
+Generic response factory
+Abstract HTTPResponse and create new classes
+Add class map to response factory
+
+F2 - POST:
+
+
+F3 - PUT:
+
+
+F4 - DELETE:
+
+
+Report:
+Architecture
+Design Patterns
+Future Work
+Testing
+
