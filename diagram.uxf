@@ -4,7 +4,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>416</x>
+      <x>424</x>
       <y>40</y>
       <w>168</w>
       <h>136</h>
@@ -25,7 +25,7 @@ main()</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>176</x>
+      <x>184</x>
       <y>8</y>
       <w>424</w>
       <h>264</h>
@@ -39,7 +39,7 @@ layer=-1</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>176</x>
+      <x>184</x>
       <y>312</y>
       <w>1344</w>
       <h>648</h>
@@ -53,7 +53,7 @@ layer=-1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>192</x>
+      <x>200</x>
       <y>40</y>
       <w>168</w>
       <h>96</h>
@@ -71,7 +71,7 @@ makeCompactGrid()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
+      <x>488</x>
       <y>480</y>
       <w>168</w>
       <h>88</h>
@@ -87,7 +87,7 @@ toString()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1000</x>
+      <x>1008</x>
       <y>480</y>
       <w>168</w>
       <h>88</h>
@@ -104,14 +104,14 @@ toString()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1112</x>
+      <x>1120</x>
       <y>352</y>
       <w>296</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>HttpResponseFactory
 --
-
+responseTypes : Map (type:String, object:HttpRequest )
 --
 fillGeneralHeader()
 createResponse(f:File, connection:String, errorCode:int)</panel_attributes>
@@ -120,7 +120,7 @@ createResponse(f:File, connection:String, errorCode:int)</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>760</x>
+      <x>768</x>
       <y>488</y>
       <w>168</w>
       <h>64</h>
@@ -135,7 +135,7 @@ getServerInfo()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>760</x>
+      <x>768</x>
       <y>608</y>
       <w>168</w>
       <h>64</h>
@@ -151,7 +151,7 @@ getStatus()</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>768</x>
+      <x>776</x>
       <y>16</y>
       <w>496</w>
       <h>264</h>
@@ -165,7 +165,7 @@ layer=-1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1080</x>
+      <x>1088</x>
       <y>184</y>
       <w>168</w>
       <h>88</h>
@@ -181,7 +181,7 @@ run()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1080</x>
+      <x>1088</x>
       <y>56</y>
       <w>168</w>
       <h>104</h>
@@ -198,7 +198,7 @@ main()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>784</x>
+      <x>792</x>
       <y>48</y>
       <w>168</w>
       <h>208</h>
@@ -220,7 +220,7 @@ isStoped()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>352</x>
+      <x>360</x>
       <y>80</y>
       <w>80</w>
       <h>32</h>
@@ -232,7 +232,7 @@ isStoped()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1096</x>
+      <x>1104</x>
       <y>424</y>
       <w>96</w>
       <h>72</h>
@@ -244,7 +244,7 @@ isStoped()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>192</x>
+      <x>200</x>
       <y>480</y>
       <w>168</w>
       <h>88</h>
@@ -260,7 +260,7 @@ toString()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>192</x>
+      <x>200</x>
       <y>712</y>
       <w>168</w>
       <h>88</h>
@@ -276,7 +276,7 @@ toString()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>192</x>
+      <x>200</x>
       <y>600</y>
       <w>168</w>
       <h>88</h>
@@ -292,7 +292,7 @@ toString()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>568</x>
+      <x>576</x>
       <y>744</y>
       <w>168</w>
       <h>88</h>
@@ -308,7 +308,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>352</x>
+      <x>360</x>
       <y>504</y>
       <w>144</w>
       <h>32</h>
@@ -320,7 +320,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>352</x>
+      <x>360</x>
       <y>544</y>
       <w>144</w>
       <h>96</h>
@@ -332,7 +332,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>352</x>
+      <x>360</x>
       <y>560</y>
       <w>192</w>
       <h>200</h>
@@ -344,7 +344,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>592</x>
+      <x>600</x>
       <y>560</y>
       <w>120</w>
       <h>200</h>
@@ -356,7 +356,7 @@ toString()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>376</x>
+      <x>384</x>
       <y>744</y>
       <w>168</w>
       <h>88</h>
@@ -372,7 +372,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>480</x>
+      <x>488</x>
       <y>560</y>
       <w>128</w>
       <h>200</h>
@@ -384,12 +384,12 @@ toString()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>912</x>
+      <x>920</x>
       <y>752</y>
       <w>168</w>
       <h>88</h>
     </coordinates>
-    <panel_attributes>PutResponse
+    <panel_attributes>DeleteResponse
 --
 
 --
@@ -401,7 +401,7 @@ toString()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1328</x>
+      <x>1336</x>
       <y>488</y>
       <w>168</w>
       <h>88</h>
@@ -418,7 +418,7 @@ toString()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1328</x>
+      <x>1336</x>
       <y>600</y>
       <w>168</w>
       <h>88</h>
@@ -435,12 +435,12 @@ toString()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1128</x>
+      <x>1136</x>
       <y>752</y>
       <w>168</w>
       <h>88</h>
     </coordinates>
-    <panel_attributes>PutResponse
+    <panel_attributes>HeadResponse
 --
 
 --
@@ -452,7 +452,7 @@ toString()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1328</x>
+      <x>1336</x>
       <y>712</y>
       <w>168</w>
       <h>88</h>
@@ -469,7 +469,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>984</x>
+      <x>992</x>
       <y>560</y>
       <w>120</w>
       <h>208</h>
@@ -481,7 +481,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1112</x>
+      <x>1120</x>
       <y>560</y>
       <w>120</w>
       <h>208</h>
@@ -493,7 +493,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1152</x>
+      <x>1160</x>
       <y>560</y>
       <w>192</w>
       <h>192</h>
@@ -505,7 +505,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1160</x>
+      <x>1168</x>
       <y>528</y>
       <w>184</w>
       <h>120</h>
@@ -517,7 +517,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1160</x>
+      <x>1168</x>
       <y>504</y>
       <w>184</w>
       <h>56</h>
@@ -529,7 +529,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>920</x>
+      <x>928</x>
       <y>504</y>
       <w>96</w>
       <h>40</h>
@@ -541,7 +541,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>640</x>
+      <x>648</x>
       <y>504</y>
       <w>136</w>
       <h>40</h>
@@ -553,7 +553,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>832</x>
+      <x>840</x>
       <y>544</y>
       <w>72</w>
       <h>80</h>
@@ -565,7 +565,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1152</x>
+      <x>1160</x>
       <y>264</y>
       <w>96</w>
       <h>104</h>
@@ -577,7 +577,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>888</x>
+      <x>896</x>
       <y>264</y>
       <w>232</w>
       <h>240</h>
@@ -589,7 +589,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>576</x>
+      <x>584</x>
       <y>112</y>
       <w>224</w>
       <h>48</h>
@@ -601,7 +601,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>944</x>
+      <x>952</x>
       <y>184</y>
       <w>152</w>
       <h>48</h>
@@ -613,7 +613,7 @@ toString()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1128</x>
+      <x>1136</x>
       <y>152</y>
       <w>80</w>
       <h>48</h>
@@ -621,5 +621,44 @@ toString()</panel_attributes>
     <panel_attributes>lt=&lt;.
 &lt;&lt;include&gt;&gt;</panel_attributes>
     <additional_attributes>30.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>536</x>
+      <y>352</y>
+      <w>296</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>HttpResponseFactory
+--
+requestTypes : Map (type:String, object:HttpRequest)
+--
+createRequest(input: InputStream)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>584</x>
+      <y>424</y>
+      <w>96</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;include&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;70.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>824</x>
+      <y>248</y>
+      <w>280</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;include&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;150.0;330.0;10.0</additional_attributes>
   </element>
 </diagram>

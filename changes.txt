@@ -1,0 +1,4 @@
+- change responseFactory to have generic method
+- change HTTPRequest to abstract with classes for each request type
+- add HTTPRequestFactory
+- add maps to factories for extendability
