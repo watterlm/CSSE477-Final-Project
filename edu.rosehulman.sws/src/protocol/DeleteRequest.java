@@ -45,50 +45,5 @@ public class DeleteRequest extends HttpRequest{
 	public DeleteRequest(){
 		
 	}
-	@Override
-	public HttpRequest read(InputStream inputStream) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/* (non-Javadoc)
-	 * @see protocol.IHttpRequest#getMethod()
-	 */
-	@Override
-	public String getMethod() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/* (non-Javadoc)
-	 * @see protocol.IHttpRequest#getUri()
-	 */
-	@Override
-	public String getUri() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/* (non-Javadoc)
-	 * @see protocol.IHttpRequest#getVersion()
-	 */
-	@Override
-	public String getVersion() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/* (non-Javadoc)
-	 * @see protocol.IHttpRequest#getBody()
-	 */
-	@Override
-	public char[] getBody() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/* (non-Javadoc)
-	 * @see protocol.IHttpRequest#getHeader()
-	 */
-	@Override
-	public Map<String, String> getHeader() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

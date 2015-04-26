@@ -37,11 +37,12 @@ import java.util.StringTokenizer;
  */
 public abstract class HttpRequest implements IHttpRequest {
 	
-	String method="";
-	String uri;
-	String version;
+	private String method="";
+	private String uri;
+	private String version;
 	Map<String, String> header;
 	char[] body;
+	
 	
 	public HttpRequest() {
 		this.header = new HashMap<String, String>();
@@ -97,7 +98,7 @@ public abstract class HttpRequest implements IHttpRequest {
 	 * @throws Exception Throws either {@link ProtocolException} for bad request or 
 	 * {@link IOException} for socket input stream read errors.
 	 */
-	public abstract HttpRequest read(InputStream inputStream) throws Exception;
+	//public abstract HttpRequest read(InputStream inputStream) throws Exception;
 	
 	@Override
 	public String toString() {
@@ -122,4 +123,17 @@ public abstract class HttpRequest implements IHttpRequest {
 		buffer.append("----------------------------------\n");
 		return buffer.toString();
 	}
+
+	//Used by factory
+	public void setUri(String str) {
+		uri = str;
+	}
+
+	//Used by factory
+	public void setVersion(String str) {
+		version = str;
+		
+	}
+	
+	
 }

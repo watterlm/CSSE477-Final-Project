@@ -39,6 +39,9 @@ public class Protocol {
     // Some useful protocol elements
     public static final String VERSION = "HTTP/1.1";
     public static final String GET = "GET";
+    public static final String PUT = "PUT";
+    public static final String POST = "POST";
+    public static final String DELETE = "DELETE";
     
     // Some useful http codes and text
     public static final int OK_CODE = 200;
@@ -84,6 +87,7 @@ public class Protocol {
     public static final String OPEN = "Keep-Alive";
     public static final String DEFAULT_FILE = "index.html";
     public static final String MIME_TEXT = "text";
+	
     
     /**
      * Returns a formatted String containing server information.<br/>

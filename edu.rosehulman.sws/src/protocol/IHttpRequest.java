@@ -75,7 +75,7 @@ public interface IHttpRequest {
 		 * @throws Exception Throws either {@link ProtocolException} for bad request or 
 		 * {@link IOException} for socket input stream read errors.
 		 */
-		public HttpRequest read(InputStream inputStream) throws Exception;
+		//public HttpRequest read(InputStream inputStream) throws Exception;
 		
 		
 		@Override

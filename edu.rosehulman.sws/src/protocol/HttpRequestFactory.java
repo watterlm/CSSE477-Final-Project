@@ -31,6 +31,8 @@ package protocol;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
@@ -38,13 +40,21 @@ import java.util.StringTokenizer;
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
  */
 public class HttpRequestFactory {
-	public HttpRequestFactory(){}
+	private static Map<String, Object> classMap;
+	
+	public HttpRequestFactory(){
+		classMap = new HashMap<String, Object>();
+		classMap.put("GET", new GetRequest());
+		classMap.put("DELETE", new DeleteRequest());
+		classMap.put("POST", new PostRequest());
+		classMap.put("PUT", new PutRequest());
+	}
 	
 	
 	//TODO: FIX, should not call private attributes of request
-	public static HttpRequest read(InputStream inputStream) throws Exception {
+	public HttpRequest read(InputStream inputStream) throws Exception {
 		// We will fill this object with the data from input stream and return it
-		HttpRequest request = new GetRequest();
+		HttpRequest request;
 	
 		
 		
@@ -66,10 +76,14 @@ public class HttpRequestFactory {
 			throw new ProtocolException(Protocol.BAD_REQUEST_CODE, Protocol.BAD_REQUEST_TEXT);
 		}
 		
-		//TODO: should be private
-		request.method = tokenizer.nextToken();		// GET
-		request.uri = tokenizer.nextToken();		// /somedir/page.html
-		request.version = tokenizer.nextToken();	// HTTP/1.1
+		String method = tokenizer.nextToken();// GET
+		
+		//Sets the request type based on the method
+		request = (HttpRequest) classMap.get(method);
+		
+		
+		request.setUri(tokenizer.nextToken());		// /somedir/page.html
+		request.setVersion(tokenizer.nextToken());	// HTTP/1.1
 		
 		// Rest of the request is a header that maps keys to values
 		// e.g. Host: www.rose-hulman.edu
