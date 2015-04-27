@@ -67,7 +67,7 @@ public class DeleteRequest extends HttpRequest{
 					//Delete the file
 					file.delete();
 					// Lets create 200 OK response
-					response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
+					response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 				}
 				else {
 					// File does not exist so lets create 404 file not found code
@@ -78,7 +78,7 @@ public class DeleteRequest extends HttpRequest{
 				//Delete the file
 				file.delete();
 				// Lets create 200 OK response
-				response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
+				response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 			}
 		}
 		else {

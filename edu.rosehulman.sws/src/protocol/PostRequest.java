@@ -82,7 +82,7 @@ public class PostRequest extends HttpRequest{
 					}
 					
 					// Lets create 200 OK response
-					response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
+					response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 				}
 				else {
 					// File does not exist so lets create 404 file not found code
@@ -102,7 +102,7 @@ public class PostRequest extends HttpRequest{
 				}
 				
 				// Lets create 200 OK response
-				response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
+				response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 			}
 		}
 		else {

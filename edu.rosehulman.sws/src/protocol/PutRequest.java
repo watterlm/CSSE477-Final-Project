@@ -78,7 +78,7 @@ public class PutRequest extends HttpRequest{
 					}
 					
 					// Lets create 200 OK response
-					response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
+					response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 				}
 				else {
 					// File does not exist so lets create 404 file not found code
@@ -86,8 +86,19 @@ public class PutRequest extends HttpRequest{
 				}
 			}
 			else { // Its a file
+				
+				//if the file exists, append to end of the file
+				try{
+					FileWriter writer = new FileWriter(rootDirectory + uri,true);
+					writer.write(body);
+					writer.close();
+				}
+				catch(IOException e){
+					response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
+				}
+				
 				// Lets create 200 OK response
-				response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
+				response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 			}
 		}
 		else {
