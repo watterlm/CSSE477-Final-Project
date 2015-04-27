@@ -1,5 +1,5 @@
 /*
- * GetResponse.java
+ * BadRequestResponse.java
  * Apr 26, 2015
  *
  * Simple Web Server (SWS) for EE407/507 and CS455/555
@@ -28,26 +28,17 @@
  
 package protocol;
 
-import java.io.File;
-import java.util.Map;
+import java.util.HashMap;
 
 /**
  * 
- * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
+ * @author Lindsey Watterson
  */
-public class GetResponse extends HttpResponse {
-
-	/**
-	 * @param version
-	 * @param status
-	 * @param phrase
-	 * @param header
-	 * @param file
-	 */
-	public GetResponse(String version, int status, String phrase,
-			Map<String, String> header, File file) {
-		super(version, status, phrase, header, file);
-		// TODO Auto-generated constructor stub
+public class BadRequestResponse extends HttpResponse {
+	
+	public BadRequestResponse() {
+		super(Protocol.VERSION, Protocol.BAD_REQUEST_CODE, 
+				Protocol.BAD_REQUEST_TEXT, new HashMap<String, String>(), null);
 	}
 
 }

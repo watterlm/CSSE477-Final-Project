@@ -80,6 +80,11 @@ public interface IHttpResponse {
 	public void put(String key, String value);
 	
 	/**
+	 * Automatically maps specific key to value in the header map.
+	 */
+	public void initiateSpecificHeaders();
+	
+	/**
 	 * Writes the data of the http response object to the output stream.
 	 * 
 	 * @param outStream The output stream

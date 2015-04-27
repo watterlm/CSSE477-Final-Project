@@ -39,7 +39,7 @@ public class HttpResponse implements IHttpResponse {
 	private int status;
 	private String phrase;
 	private Map<String, String> header;
-	private File file;
+	protected File file;
 
 	
 	/**
@@ -186,6 +186,11 @@ public class HttpResponse implements IHttpResponse {
 		}
 		buffer.append("\n----------------------------------\n");
 		return buffer.toString();
+	}
+
+	@Override
+	public void initiateSpecificHeaders() {
+		
 	}
 	
 }
