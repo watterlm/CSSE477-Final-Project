@@ -28,8 +28,8 @@ import java.net.Socket;
 
 import protocol.HttpRequest;
 import protocol.HttpRequestFactory;
-import protocol.HttpResponse;
 import protocol.HttpResponseFactory;
+import protocol.IHttpResponse;
 import protocol.Protocol;
 import protocol.ProtocolException;
 
@@ -91,7 +91,7 @@ public class ConnectionHandler implements Runnable {
 		// At this point we have the input and output stream of the socket
 		// Now lets create a HttpRequest object
 		HttpRequest request = null;
-		HttpResponse response = null;
+		IHttpResponse response = null;
 		try {
 			HttpRequestFactory requestFactory = new HttpRequestFactory();
 			request = requestFactory.read(inStream);
@@ -103,14 +103,14 @@ public class ConnectionHandler implements Runnable {
 			// Protocol.BAD_REQUEST_CODE and Protocol.NOT_SUPPORTED_CODE
 			int status = pe.getStatus();
 			if(status == Protocol.BAD_REQUEST_CODE) {
-				response = HttpResponseFactory.create400BadRequest(Protocol.CLOSE);
+				response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
 			}
 			// TODO: Handle version not supported code as well
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			// For any other error, we will create bad request response as well
-			response = HttpResponseFactory.create400BadRequest(Protocol.CLOSE);
+			response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
 		}
 		
 		if(response != null) {
@@ -142,7 +142,7 @@ public class ConnectionHandler implements Runnable {
 				// "request.version" string ignoring the case of the letters in both strings
 				// TODO: Fill in the rest of the code here
 				if(request.getVersion() != Protocol.VERSION){
-					response = HttpResponseFactory.create505NotSupported(Protocol.CLOSE);
+					response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.NOT_SUPPORTED_CODE);
 				}
 			}
 			else{
@@ -174,7 +174,7 @@ public class ConnectionHandler implements Runnable {
 		// So this is a temporary patch for that problem and should be removed
 		// after a response object is created for protocol version mismatch.
 		if(response == null) {
-			response = HttpResponseFactory.create400BadRequest(Protocol.CLOSE);
+			response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);;
 		}
 		
 		try{
