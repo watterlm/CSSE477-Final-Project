@@ -33,17 +33,17 @@ import java.util.Map;
  * @author Chandan R. Rupakheti (rupakhet@rose-hulman.edu)
  */
 public class HttpResponseFactory {
-	private static Map<String, Object> classMap;
+	private static Map<Integer, Object> classMap;
 	
 	public HttpResponseFactory(){
-		classMap = new HashMap<String, Object>();
-		classMap.put(Integer.toString(Protocol.OK_CODE), new OkResponse());
-		classMap.put(Integer.toString(Protocol.MOVED_PERMANENTLY_CODE), new MovedPermanentlyResponse());
-		classMap.put(Integer.toString(Protocol.NOT_MODIFIED_CODE), new NotModifiedResponse());
-		classMap.put(Integer.toString(Protocol.BAD_REQUEST_CODE), new BadRequestResponse());
-		classMap.put(Integer.toString(Protocol.NOT_FOUND_CODE), new NotFoundResponse());
-		classMap.put(Integer.toString(Protocol.NOT_SUPPORTED_CODE), new NotSupportedResponse());
-		classMap.put(Integer.toString(Protocol.INTERNAL_ERROR_CODE), new InternalErrorResponse());
+		classMap = new HashMap<Integer, Object>();
+		classMap.put(Protocol.OK_CODE, new OkResponse());
+		classMap.put(Protocol.MOVED_PERMANENTLY_CODE, new MovedPermanentlyResponse());
+		classMap.put(Protocol.NOT_MODIFIED_CODE, new NotModifiedResponse());
+		classMap.put(Protocol.BAD_REQUEST_CODE, new BadRequestResponse());
+		classMap.put(Protocol.NOT_FOUND_CODE, new NotFoundResponse());
+		classMap.put(Protocol.NOT_SUPPORTED_CODE, new NotSupportedResponse());
+		classMap.put(Protocol.INTERNAL_ERROR_CODE, new InternalErrorResponse());
 	}
 	
 	/**
@@ -77,11 +77,11 @@ public class HttpResponseFactory {
 	 * @param responseCode The Protocol response code for the current response.
 	 * @return A {@link HttpResponse} object represent 200 status.
 	 */	
-	public static IHttpResponse createResponse(File file, String connection, int responseCode){
+	public IHttpResponse createResponse(File file, String connection, int responseCode){
 		IHttpResponse response = null;
 		
 		// Determine response to create based on response code. Default will return an internal error
-		response = (IHttpResponse) classMap.get(Integer.toString(responseCode));
+		response = (IHttpResponse) classMap.get(responseCode);
 		if (response == null){
 			response = new InternalErrorResponse();
 		}

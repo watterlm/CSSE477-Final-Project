@@ -41,11 +41,11 @@ import server.Server;
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
  */
 public class PutRequest extends HttpRequest{
-	String method="";
+	//String method="";
 	String uri;
 	String version;
-	Map<String, String> header;
-	char[] body;
+	//Map<String, String> header;
+	//char[] body;
 	
 	public PutRequest(){
 		
@@ -54,12 +54,16 @@ public class PutRequest extends HttpRequest{
 	@Override
 	public IHttpResponse execute(Server server) {
 		IHttpResponse response; 
+		HttpResponseFactory responseFactory = new HttpResponseFactory();
 		//String uri = request.getUri();
 		// Get root directory path from server
 		String rootDirectory = server.getRootDirectory();
 		// Combine them together to form absolute file path
 		File file = new File(rootDirectory + uri);
-
+		System.out.print("body in execute: ");
+		for (int i=0;i<body.length;i++)
+			System.out.print(body[i]);
+		System.out.println();
 		// Check if the file exists
 		if(file.exists()) {
 			if(file.isDirectory()) {
@@ -74,15 +78,23 @@ public class PutRequest extends HttpRequest{
 						writer.close();
 					}
 					catch(IOException e){
-						response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
+						response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
 					}
 					
 					// Lets create 200 OK response
-					response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
+					response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 				}
 				else {
+					try{
+						FileWriter writer = new FileWriter(rootDirectory + uri,false);
+						writer.write(body);
+						writer.close();
+					}
+					catch(IOException e){
+						response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
+					}
 					// File does not exist so lets create 404 file not found code
-					response = HttpResponseFactory.createResponse(null,Protocol.CLOSE, Protocol.NOT_FOUND_CODE);
+					response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 				}
 			}
 			else { // Its a file
@@ -94,16 +106,25 @@ public class PutRequest extends HttpRequest{
 					writer.close();
 				}
 				catch(IOException e){
-					response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
+					response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
 				}
 				
 				// Lets create 200 OK response
-				response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
+				response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 			}
 		}
 		else {
+			try{
+				//file.createNewFile();
+				FileWriter writer = new FileWriter(rootDirectory + uri,false);
+				writer.write(body);
+				writer.close();
+			}
+			catch(IOException e){
+				response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
+			}
 			// File does not exist so lets create 404 file not found code
-			response = HttpResponseFactory.createResponse(null,Protocol.CLOSE,Protocol.NOT_FOUND_CODE);
+			response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 		}
 		return response;
 	}

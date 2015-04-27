@@ -39,11 +39,11 @@ import server.Server;
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
  */
 public class DeleteRequest extends HttpRequest{
-	String method="";
+	//String method="";
 	String uri;
 	String version;
-	Map<String, String> header;
-	char[] body;
+	//Map<String, String> header;
+	//char[] body;
 	
 	public DeleteRequest(){
 		
@@ -51,7 +51,7 @@ public class DeleteRequest extends HttpRequest{
 
 	public IHttpResponse execute(Server server) {
 		IHttpResponse response;
-		
+		HttpResponseFactory responseFactory = new HttpResponseFactory();
 		//String uri = request.getUri();
 		// Get root directory path from server
 		String rootDirectory = server.getRootDirectory();
@@ -67,23 +67,23 @@ public class DeleteRequest extends HttpRequest{
 					//Delete the file
 					file.delete();
 					// Lets create 200 OK response
-					response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
+					response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 				}
 				else {
 					// File does not exist so lets create 404 file not found code
-					response = HttpResponseFactory.createResponse(null,Protocol.CLOSE, Protocol.NOT_FOUND_CODE);
+					response = responseFactory.createResponse(null,Protocol.CLOSE, Protocol.NOT_FOUND_CODE);
 				}
 			}
 			else { // Its a file
 				//Delete the file
 				file.delete();
 				// Lets create 200 OK response
-				response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
+				response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 			}
 		}
 		else {
 			// File does not exist so lets create 404 file not found code
-			response = HttpResponseFactory.createResponse(null,Protocol.CLOSE,Protocol.NOT_FOUND_CODE);
+			response = responseFactory.createResponse(null,Protocol.CLOSE,Protocol.NOT_FOUND_CODE);
 		}
 		return response;
 	}

@@ -57,6 +57,7 @@ public class GetRequest extends HttpRequest{
 //		
 		
 		IHttpResponse response;
+		HttpResponseFactory responseFactory = new HttpResponseFactory();
 		// Handling GET request here
 		// Get relative URI path from request
 		//String uri = request.getUri();
@@ -72,21 +73,22 @@ public class GetRequest extends HttpRequest{
 				file = new File(location);
 				if(file.exists()) {
 					// Lets create 200 OK response
-					response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
+					response = responseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
 				}
 				else {
 					// File does not exist so lets create 404 file not found code
-					response = HttpResponseFactory.createResponse(null,Protocol.CLOSE, Protocol.NOT_FOUND_CODE);
+					response = responseFactory.createResponse(null,Protocol.CLOSE, Protocol.NOT_FOUND_CODE);
 				}
 			}
 			else { // Its a file
 				// Lets create 200 OK response
-				response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
+				response = responseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
 			}
 		}
 		else {
 			// File does not exist so lets create 404 file not found code
-			response = HttpResponseFactory.createResponse(null,Protocol.CLOSE,Protocol.NOT_FOUND_CODE);
+			
+			response = responseFactory.createResponse(null,Protocol.CLOSE,Protocol.NOT_FOUND_CODE);
 		}
 		return response;
 	}

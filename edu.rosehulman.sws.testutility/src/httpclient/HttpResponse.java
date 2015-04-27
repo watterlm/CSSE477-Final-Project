@@ -1,10 +1,10 @@
 /*
- * HttpRequestFactory.java
- * Apr 24, 2015
+ * HttpRequest.java
+ * Oct 7, 2012
  *
- * Simple Web Server (SWS) for EE407/507 and CS455/555
+ * Simple Web Server (SWS) for CSSE 477
  * 
- * Copyright (C) 2011 Chandan Raj Rupakheti, Clarkson University
+ * Copyright (C) 2012 Chandan Raj Rupakheti
  * 
  * This program is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License 
@@ -17,76 +17,86 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/lgpl.html>.
  * 
- * Contact Us:
- * Chandan Raj Rupakheti (rupakhcr@clarkson.edu)
- * Department of Electrical and Computer Engineering
- * Clarkson University
- * Potsdam
- * NY 13699-5722
- * http://clarkson.edu/~rupakhcr
  */
+
  
-package protocol;
+package httpclient;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
+ * Represents a request object for HTTP.
  * 
- * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
+ * @author Chandan R. Rupakheti (rupakhet@rose-hulman.edu)
  */
-public class HttpRequestFactory {
-	private static Map<String, Object> classMap;
+public class HttpResponse {
+	private String statusLine;
+	private Map<String, String> header;
+	private char[] body;
 	
-	public HttpRequestFactory(){
-		//This is a map of the request name to the request objects. For adding more
-		//request types, simply add the new request to this map.
-		classMap = new HashMap<String, Object>();
-		classMap.put("GET", new GetRequest());
-		classMap.put("DELETE", new DeleteRequest());
-		classMap.put("POST", new PostRequest());
-		classMap.put("PUT", new PutRequest());
+	private HttpResponse() {
+		this.statusLine = "";
+		this.header = new HashMap<String, String>();
+		this.body = new char[0];
 	}
 	
+
+	/**
+	 * Gets the status line.
+	 * @return the version
+	 */
+	public String getStatusLine() {
+		return statusLine;
+	}
 	
-	//TODO: FIX, should not call private attributes of request
-	public HttpRequest read(InputStream inputStream) throws Exception {
+	/**
+	 * Gets the body of the response.
+	 * 
+	 * @return The body of the response.
+	 */
+	public char[] getBody() {
+		return body;
+	}
+
+	/**
+	 * The key to value mapping in the request header fields.
+	 * 
+	 * @return the header
+	 */
+	public Map<String, String> getHeader() {
+		// Lets return the unmodifable view of the header map
+		return Collections.unmodifiableMap(header);
+	}
+
+	/**
+	 * Reads raw data from the supplied input stream and constructs a 
+	 * <tt>HttpRequest</tt> object out of the raw data.
+	 * 
+	 * @param inputStream The input stream to read from.
+	 * @return A <tt>HttpRequest</tt> object.
+	 * @throws Exception Throws either {@link ProtocolException} for bad request or 
+	 * {@link IOException} for socket input stream read errors.
+	 */
+	public static HttpResponse read(InputStream inputStream) throws Exception {
 		// We will fill this object with the data from input stream and return it
-		HttpRequest request;
-	
-		
+		HttpResponse response = new HttpResponse();
 		
 		InputStreamReader inStreamReader = new InputStreamReader(inputStream);
 		BufferedReader reader = new BufferedReader(inStreamReader);
 		
-		//First Request Line: GET /somedir/page.html HTTP/1.1
+		//First Response Line: HTTP/1.1 200 OK
 		String line = reader.readLine(); // A line ends with either a \r, or a \n, or both
 		
 		if(line == null) {
-			throw new ProtocolException(Protocol.BAD_REQUEST_CODE, Protocol.BAD_REQUEST_TEXT);
+			throw new ProtocolException();
 		}
-		
-		// We will break this line using space as delimeter into three parts
-		StringTokenizer tokenizer = new StringTokenizer(line, " ");
-		
-		// Error checking the first line must have exactly three elements
-		if(tokenizer.countTokens() != 3) {
-			throw new ProtocolException(Protocol.BAD_REQUEST_CODE, Protocol.BAD_REQUEST_TEXT);
-		}
-		
-		String method = tokenizer.nextToken();// GET
-		
-		//Sets the request type based on the method
-		request = (HttpRequest) classMap.get(method);
-		
-		
-		request.setUri(tokenizer.nextToken());		// /somedir/page.html
-		request.setVersion(tokenizer.nextToken());	// HTTP/1.1
+
+		response.statusLine = line;
 		
 		// Rest of the request is a header that maps keys to values
 		// e.g. Host: www.rose-hulman.edu
@@ -119,7 +129,7 @@ public class HttpRequestFactory {
 				value = value.trim();
 				
 				// Now lets put the key=>value mapping to the header map
-				request.header.put(key, value);
+				response.header.put(key, value);
 			}
 			
 			// Processed one more line, now lets read another header line and loop
@@ -128,19 +138,35 @@ public class HttpRequestFactory {
 		
 		int contentLength = 0;
 		try {
-			contentLength = Integer.parseInt(request.header.get(Protocol.CONTENT_LENGTH.toLowerCase()));
+			contentLength = Integer.parseInt(response.header.get("content-length"));
 		}
 		catch(Exception e){}
-		System.out.println("Content length:" + contentLength);
+		
 		if(contentLength > 0) {
-			request.body = new char[contentLength];
-			//reader.read(request.body);
-			char[] str = reader.readLine().toCharArray();
-			request.body = Arrays.copyOf(str, contentLength); 
-			System.out.println("Read body:" + request.body.toString());
+			response.body = new char[contentLength];
+			reader.read(response.body);
 		}
 		
-		return request;
+		return response;
+	}
+	
+	
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("----------- Header ----------------\n");
+		buffer.append(this.statusLine);
+		buffer.append("\n");
 		
+		for(Map.Entry<String, String> entry : this.header.entrySet()) {
+			buffer.append(entry.getKey());
+			buffer.append(" : ");
+			buffer.append(entry.getValue());
+			buffer.append("\n");
+		}
+		buffer.append("------------- Body ---------------\n");
+		buffer.append(this.body);
+		buffer.append("\n----------------------------------\n");
+		return buffer.toString();
 	}
 }
