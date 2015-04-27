@@ -31,6 +31,8 @@ package protocol;
 import java.io.InputStream;
 import java.util.Map;
 
+import server.Server;
+
 /**
  * 
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
@@ -80,4 +82,6 @@ public interface IHttpRequest {
 		
 		@Override
 		public String toString();
+		
+		public HttpResponse execute(Server server);
 	}

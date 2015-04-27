@@ -43,6 +43,8 @@ public class HttpRequestFactory {
 	private static Map<String, Object> classMap;
 	
 	public HttpRequestFactory(){
+		//This is a map of the request name to the request objects. For adding more
+		//request types, simply add the new request to this map.
 		classMap = new HashMap<String, Object>();
 		classMap.put("GET", new GetRequest());
 		classMap.put("DELETE", new DeleteRequest());

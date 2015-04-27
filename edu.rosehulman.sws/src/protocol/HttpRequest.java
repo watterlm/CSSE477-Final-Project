@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import server.Server;
+
 /**
  * Represents a request object for HTTP.
  * 
@@ -135,5 +137,5 @@ public abstract class HttpRequest implements IHttpRequest {
 		
 	}
 	
-	
+	public abstract HttpResponse execute(Server server);
 }
