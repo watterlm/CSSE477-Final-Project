@@ -49,9 +49,8 @@ public class DeleteRequest extends HttpRequest{
 		
 	}
 
-
-	public HttpResponse execute(Server server) {
-		HttpResponse response;
+	public IHttpResponse execute(Server server) {
+		IHttpResponse response;
 		
 		//String uri = request.getUri();
 		// Get root directory path from server
@@ -68,23 +67,23 @@ public class DeleteRequest extends HttpRequest{
 					//Delete the file
 					file.delete();
 					// Lets create 200 OK response
-					response = HttpResponseFactory.create200OK(file, Protocol.CLOSE);
+					response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
 				}
 				else {
 					// File does not exist so lets create 404 file not found code
-					response = HttpResponseFactory.create404NotFound(Protocol.CLOSE);
+					response = HttpResponseFactory.createResponse(null,Protocol.CLOSE, Protocol.NOT_FOUND_CODE);
 				}
 			}
 			else { // Its a file
 				//Delete the file
 				file.delete();
 				// Lets create 200 OK response
-				response = HttpResponseFactory.create200OK(file, Protocol.CLOSE);
+				response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
 			}
 		}
 		else {
 			// File does not exist so lets create 404 file not found code
-			response = HttpResponseFactory.create404NotFound(Protocol.CLOSE);
+			response = HttpResponseFactory.createResponse(null,Protocol.CLOSE,Protocol.NOT_FOUND_CODE);
 		}
 		return response;
 	}

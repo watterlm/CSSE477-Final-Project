@@ -29,6 +29,8 @@
 package protocol;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
@@ -50,14 +52,14 @@ public class PutRequest extends HttpRequest{
 	}
 
 	@Override
-	public HttpResponse execute(Server server) {
-		HttpResponse response; 
+	public IHttpResponse execute(Server server) {
+		IHttpResponse response; 
 		//String uri = request.getUri();
 		// Get root directory path from server
 		String rootDirectory = server.getRootDirectory();
 		// Combine them together to form absolute file path
 		File file = new File(rootDirectory + uri);
-		
+
 		// Check if the file exists
 		if(file.exists()) {
 			if(file.isDirectory()) {
@@ -65,22 +67,32 @@ public class PutRequest extends HttpRequest{
 				String location = rootDirectory + uri + System.getProperty("file.separator") + Protocol.DEFAULT_FILE;
 				file = new File(location);
 				if(file.exists()) {
+					//if the file exists, append to end of the file
+					try{
+						FileWriter writer = new FileWriter(rootDirectory + uri,true);
+						writer.write(body);
+						writer.close();
+					}
+					catch(IOException e){
+						response = HttpResponseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
+					}
+					
 					// Lets create 200 OK response
-					response = HttpResponseFactory.create200OK(file, Protocol.CLOSE);
+					response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
 				}
 				else {
 					// File does not exist so lets create 404 file not found code
-					response = HttpResponseFactory.create404NotFound(Protocol.CLOSE);
+					response = HttpResponseFactory.createResponse(null,Protocol.CLOSE, Protocol.NOT_FOUND_CODE);
 				}
 			}
 			else { // Its a file
 				// Lets create 200 OK response
-				response = HttpResponseFactory.create200OK(file, Protocol.CLOSE);
+				response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
 			}
 		}
 		else {
 			// File does not exist so lets create 404 file not found code
-			response = HttpResponseFactory.create404NotFound(Protocol.CLOSE);
+			response = HttpResponseFactory.createResponse(null,Protocol.CLOSE,Protocol.NOT_FOUND_CODE);
 		}
 		return response;
 	}

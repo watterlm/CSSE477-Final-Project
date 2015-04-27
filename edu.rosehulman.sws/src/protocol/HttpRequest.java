@@ -137,5 +137,5 @@ public abstract class HttpRequest implements IHttpRequest {
 		
 	}
 	
-	public abstract HttpResponse execute(Server server);
+	public abstract IHttpResponse execute(Server server);
 }

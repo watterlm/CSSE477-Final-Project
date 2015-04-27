@@ -83,5 +83,5 @@ public interface IHttpRequest {
 		@Override
 		public String toString();
 		
-		public HttpResponse execute(Server server);
+		public IHttpResponse execute(Server server);
 	}

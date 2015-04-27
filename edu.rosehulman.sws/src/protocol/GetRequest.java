@@ -50,12 +50,13 @@ public class GetRequest extends HttpRequest{
 	}
 
 	@Override
-	public HttpResponse execute(Server server) {
+	public IHttpResponse execute(Server server) {
 //		Map<String, String> header = request.getHeader();
 //		String date = header.get("if-modified-since");
 //		String hostName = header.get("host");
 //		
-		HttpResponse response;
+		
+		IHttpResponse response;
 		// Handling GET request here
 		// Get relative URI path from request
 		//String uri = request.getUri();
@@ -71,21 +72,21 @@ public class GetRequest extends HttpRequest{
 				file = new File(location);
 				if(file.exists()) {
 					// Lets create 200 OK response
-					response = HttpResponseFactory.create200OK(file, Protocol.CLOSE);
+					response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
 				}
 				else {
 					// File does not exist so lets create 404 file not found code
-					response = HttpResponseFactory.create404NotFound(Protocol.CLOSE);
+					response = HttpResponseFactory.createResponse(null,Protocol.CLOSE, Protocol.NOT_FOUND_CODE);
 				}
 			}
 			else { // Its a file
 				// Lets create 200 OK response
-				response = HttpResponseFactory.create200OK(file, Protocol.CLOSE);
+				response = HttpResponseFactory.createResponse(file, Protocol.CLOSE, Protocol.OK_CODE);
 			}
 		}
 		else {
 			// File does not exist so lets create 404 file not found code
-			response = HttpResponseFactory.create404NotFound(Protocol.CLOSE);
+			response = HttpResponseFactory.createResponse(null,Protocol.CLOSE,Protocol.NOT_FOUND_CODE);
 		}
 		return response;
 	}
