@@ -192,5 +192,13 @@ public class HttpResponse implements IHttpResponse {
 	public void initiateSpecificHeaders() {
 		
 	}
+
+	/* (non-Javadoc)
+	 * @see protocol.IHttpResponse#setFile()
+	 */
+	@Override
+	public void setFile(File file) {
+		this.file = file;
+	}
 	
 }

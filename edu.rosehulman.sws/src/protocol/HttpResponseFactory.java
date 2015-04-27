@@ -24,6 +24,8 @@ package protocol;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This is a factory to produce various kind of HTTP responses.
@@ -31,6 +33,19 @@ import java.util.Date;
  * @author Chandan R. Rupakheti (rupakhet@rose-hulman.edu)
  */
 public class HttpResponseFactory {
+	private static Map<String, Object> classMap;
+	
+	public HttpResponseFactory(){
+		classMap = new HashMap<String, Object>();
+		classMap.put(Integer.toString(Protocol.OK_CODE), new OkResponse());
+		classMap.put(Integer.toString(Protocol.MOVED_PERMANENTLY_CODE), new MovedPermanentlyResponse());
+		classMap.put(Integer.toString(Protocol.NOT_MODIFIED_CODE), new NotModifiedResponse());
+		classMap.put(Integer.toString(Protocol.BAD_REQUEST_CODE), new BadRequestResponse());
+		classMap.put(Integer.toString(Protocol.NOT_FOUND_CODE), new NotFoundResponse());
+		classMap.put(Integer.toString(Protocol.NOT_SUPPORTED_CODE), new NotSupportedResponse());
+		classMap.put(Integer.toString(Protocol.INTERNAL_ERROR_CODE), new InternalErrorResponse());
+	}
+	
 	/**
 	 * Convenience method for adding general header to the supplied response object.
 	 * 
@@ -66,29 +81,13 @@ public class HttpResponseFactory {
 		IHttpResponse response = null;
 		
 		// Determine response to create based on response code. Default will return an internal error
-		switch(responseCode){
-			case Protocol.OK_CODE:
-				response = new OkResponse(file);
-				break;
-			case Protocol.MOVED_PERMANENTLY_CODE:
-				response = new MovedPermanentlyResponse();
-				break;
-			case Protocol.NOT_MODIFIED_CODE:
-				response = new NotModifiedResponse();
-				break;
-			case Protocol.BAD_REQUEST_CODE:
-				response = new BadRequestResponse();
-				break;
-			case Protocol.NOT_FOUND_CODE:
-				response = new NotFoundResponse();
-				break;
-			case Protocol.NOT_SUPPORTED_CODE:
-				response = new NotSupportedResponse();
-				break;
-			default:
-				response = new InternalErrorResponse();
-				break;
+		response = (IHttpResponse) classMap.get(Integer.toString(responseCode));
+		if (response == null){
+			response = new InternalErrorResponse();
 		}
+		
+		// Update the file since all are initiated with a null file
+		response.setFile(file);
 		
 		// Lets fill up header fields with more information
 		fillGeneralHeader(response, connection);

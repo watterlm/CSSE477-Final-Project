@@ -67,6 +67,13 @@ public interface IHttpResponse {
 	public File getFile();
 	
 	/**
+	 * The file to be sent.
+	 * 
+	 * @return the file
+	 */
+	public void setFile(File file);
+	
+	/**
 	 * Returns the header fields associated with the response object.
 	 * @return the header
 	 */

@@ -41,8 +41,12 @@ import java.util.HashMap;
 public class OkResponse extends HttpResponse {
 
 
-	public OkResponse(File file) {
-		super(Protocol.VERSION, Protocol.OK_CODE, Protocol.OK_TEXT, new HashMap<String, String>(), file);
+	public OkResponse() {
+		super(Protocol.VERSION, Protocol.OK_CODE, Protocol.OK_TEXT, new HashMap<String, String>(), null);
+	}
+	
+	public void setFile(File file){
+		this.file = file;
 	}
 	
 	@Override
