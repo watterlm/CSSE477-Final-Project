@@ -51,7 +51,7 @@ public class DeleteRequest extends HttpRequest{
 
 	public IHttpResponse execute(Server server) {
 		IHttpResponse response;
-		HttpResponseFactory responseFactory = new HttpResponseFactory();
+		HttpResponseFactory responseFactory = new HttpResponseFactory(server);
 		//String uri = request.getUri();
 		// Get root directory path from server
 		String rootDirectory = server.getRootDirectory();

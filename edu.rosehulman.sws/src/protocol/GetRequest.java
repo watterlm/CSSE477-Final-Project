@@ -57,7 +57,7 @@ public class GetRequest extends HttpRequest{
 //		
 		
 		IHttpResponse response;
-		HttpResponseFactory responseFactory = new HttpResponseFactory();
+		HttpResponseFactory responseFactory = new HttpResponseFactory(server);
 		// Handling GET request here
 		// Get relative URI path from request
 		//String uri = request.getUri();
