@@ -42,18 +42,22 @@ import server.OutputStreamWrapper;
  */
 public class ServletHandlerResponse {
 	private OutputStreamWrapper output;
-	private HttpResponse response;
+	private IHttpResponse response;
 	
 	public ServletHandlerResponse(){
 		
 	}
 	
-	public ServletHandlerResponse(OutputStreamWrapper output, HttpResponse response)
+	public ServletHandlerResponse(OutputStreamWrapper output, IHttpResponse response)
 	{
 		this.output = output;
 		this.response = response;
 	}
 	
+	public void setResponse(IHttpResponse r){
+		
+		response = r;
+	}
 	public void write() throws IOException{
 		BufferedOutputStream out = new BufferedOutputStream(output, Protocol.CHUNK_LENGTH);
 

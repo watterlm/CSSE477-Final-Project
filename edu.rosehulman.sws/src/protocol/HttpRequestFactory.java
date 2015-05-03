@@ -31,11 +31,13 @@ package protocol;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import server.OutputStreamWrapper;
 import server.Server;
 
 /**
@@ -149,10 +151,15 @@ public class HttpRequestFactory {
 	}
 
 
-	public void handle(Server server, IHttpResponse response) {
+	public void handle(OutputStream outStream, IHttpRequest request) {
 		responseFactory.findPlugins();
-		IHandler handler = responseFactory.generateHandler(method, uri);
-		handler.handle(server,response);
+		
+		IHandler handler = responseFactory.generateHandler(request.getMethod(), request.getUri());
+		IHttpResponse blankResponse = null;
+		
+		OutputStreamWrapper osw = new OutputStreamWrapper(outStream);
+		ServletHandlerResponse shr = new ServletHandlerResponse(osw,blankResponse);
+		handler.handle(request,shr);
 		
 	}
 }

@@ -33,5 +33,5 @@ package protocol;
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
  */
 public interface IHandler {
-	public void handle(HttpRequest request, ServletHandlerResponse servlet);
+	public void handle(IHttpRequest request, ServletHandlerResponse servlet);
 }

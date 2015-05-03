@@ -39,8 +39,8 @@ public class OutputStreamWrapper extends OutputStream{
 	private OutputStream out;
 	private boolean hasWrittenHeader = false;
 	
-	public OutputStreamWrapper(){
-		
+	public OutputStreamWrapper(OutputStream o){
+		out = o;
 	}
 	public boolean getHasWrittenHeader(){
 		return hasWrittenHeader;

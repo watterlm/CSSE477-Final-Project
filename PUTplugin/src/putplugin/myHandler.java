@@ -18,7 +18,7 @@ public class myHandler implements IHandler{
 		
 		HttpResponseFactory responseFactory = new HttpResponseFactory(server);
 		response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
-
+		servlet.setResponse(response);
 		servlet.write(response);
 	}
 }

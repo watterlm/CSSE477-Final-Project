@@ -164,7 +164,7 @@ public class ConnectionHandler implements Runnable {
 				//Response is sent in the SHR
 				
 				//response = request.execute(server);
-				requestFactory.handle(server,response);
+				requestFactory.handle(outStream,request);
 			}
 			/*
 			else if(request.getMethod().equalsIgnoreCase(Protocol.GET)) {
