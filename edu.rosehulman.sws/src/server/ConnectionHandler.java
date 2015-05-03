@@ -92,9 +92,10 @@ public class ConnectionHandler implements Runnable {
 		// Now lets create a HttpRequest object
 		HttpRequest request = null;
 		IHttpResponse response = null;
-		HttpResponseFactory responseFactory = new HttpResponseFactory();
+		HttpResponseFactory responseFactory = new HttpResponseFactory(server);
+		HttpRequestFactory requestFactory = new HttpRequestFactory(server);
 		try {
-			HttpRequestFactory requestFactory = new HttpRequestFactory();
+			
 			request = requestFactory.read(inStream);
 			System.out.println(request);
 			
@@ -151,11 +152,19 @@ public class ConnectionHandler implements Runnable {
 			else{
 				//Changed executing the response to a method within each of the request classes. 
 				//This will allow further commands to be added without editing ConnectionHandler.
+				/*
 				System.out.print("body: ");
 				for (int i=0;i<request.getBody().length;i++)
 					System.out.print(request.getBody()[i]);
 				System.out.println();
-				response = request.execute(server);
+				*/
+				
+				
+				//Changed the execute from the request to the IHandler
+				//Response is sent in the SHR
+				
+				//response = request.execute(server);
+				requestFactory.handle(server,response);
 			}
 			/*
 			else if(request.getMethod().equalsIgnoreCase(Protocol.GET)) {

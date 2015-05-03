@@ -28,17 +28,34 @@
  
 package server;
 
+import java.io.IOException;
 import java.io.OutputStream;
 
 /**
  * 
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
  */
-public class OutputStreamWrapper {
+public class OutputStreamWrapper extends OutputStream{
 	private OutputStream out;
-	private Boolean hasWrittenHeader = false;
+	private boolean hasWrittenHeader = false;
 	
 	public OutputStreamWrapper(){
 		
+	}
+	public boolean getHasWrittenHeader(){
+		return hasWrittenHeader;
+	}
+	/* (non-Javadoc)
+	 * @see java.io.OutputStream#write(int)
+	 */
+	@Override
+	public void write(int b) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void writeHeader(byte[] b) throws IOException{
+		super.write(b);
+		hasWrittenHeader = true;
 	}
 }

@@ -114,8 +114,9 @@ public class PostRequest extends HttpRequest{
 				response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 			}
 		}
-		else {
+		else {//File doesn't exist
 			try{
+				file.createNewFile();
 				FileWriter writer = new FileWriter(rootDirectory + uri,false);
 				writer.write(body);
 				writer.close();

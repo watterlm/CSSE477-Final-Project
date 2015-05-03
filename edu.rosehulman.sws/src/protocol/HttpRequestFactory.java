@@ -36,16 +36,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import server.Server;
+
 /**
  * 
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
  */
 public class HttpRequestFactory {
 	private static Map<String, Object> classMap;
+	private static HttpResponseFactory responseFactory;
 	
-	public HttpRequestFactory(){
+	public HttpRequestFactory(Server server){
 		//This is a map of the request name to the request objects. For adding more
 		//request types, simply add the new request to this map.
+		responseFactory = new HttpResponseFactory(server);
 		classMap = new HashMap<String, Object>();
 		classMap.put("GET", new GetRequest());
 		classMap.put("DELETE", new DeleteRequest());
@@ -141,6 +145,12 @@ public class HttpRequestFactory {
 		}
 		
 		return request;
+		
+	}
+
+
+	public void handle(Server server, IHttpResponse response) {
+		responseFactory.handle(server,response);
 		
 	}
 }

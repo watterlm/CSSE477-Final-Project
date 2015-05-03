@@ -171,4 +171,15 @@ public class HttpResponseFactory {
 
 		return response;
 	}
+
+
+	
+	
+	
+	public void handle(Server server, IHttpResponse response) {
+		// TODO pass this response on the appropriate IHandler
+
+	}
+	
+	
 }
