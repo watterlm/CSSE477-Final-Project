@@ -25,12 +25,18 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import server.Server;
 
@@ -73,6 +79,7 @@ public class HttpResponseFactory {
 		String rootDirectory = server.getRootDirectory();
 		pluginDirectory = rootDirectory + System.getProperty("file.separator")
 				+ "plugin";
+		findPlugins();
 
 	}
 
@@ -90,23 +97,30 @@ public class HttpResponseFactory {
 				JarFile jf = new JarFile(f.getPath());
 
 				Manifest manifest = jf.getManifest();
-				// Attributes att = manifest.getMainAttributes();
-				// String pluginClassName = att.getValue("Plugin-Name");
-				// System.out.println("Plugin Class Name  "+pluginClassName);
-				// IPlugin plugin;
-				//
-				// plugin = (IPlugin) pluginLoader.loadClass(
-				// pluginClassName).newInstance();
-				// System.out.println("Plugin Title: "+plugin.getTitle());
-				// plugins.add(plugin);
-				// Platform p = this;
-				// plugin.setPlatform(p);
-
+				Attributes att = manifest.getMainAttributes();
+				JSONArray mappings = new JSONArray(att.getValue("pluginList"));
+				for (int i = 1; i < mappings.length(); i++){
+					JSONObject map = (JSONObject) mappings.get(i);
+					String method = (String) map.get("method");
+					String uri = (String) map.get("uri");
+					String obj = (String) map.get("class");
+					
+					IHandler handler = (IHandler) pluginLoader.loadClass(obj).newInstance();					
+					HashMap hash = new HashMap<String, Object>();
+					hash.put(uri, handler);
+					
+					classMap.put(method, hash);
+				}
 			}
 		} catch (Exception e) {
 
 			System.out.println("Error in loadPluginList: " + e.getMessage());
 		}
+	}
+	
+	public IHandler generateHandler(String method, String uri){
+		IHandler handler = classMap.get(method).get(uri);
+		return handler;
 	}
 
 	/**
@@ -170,15 +184,6 @@ public class HttpResponseFactory {
 		response.initiateSpecificHeaders();
 
 		return response;
-	}
-
-
-	
-	
-	
-	public void handle(Server server, IHttpResponse response) {
-		// TODO pass this response on the appropriate IHandler
-
 	}
 	
 	

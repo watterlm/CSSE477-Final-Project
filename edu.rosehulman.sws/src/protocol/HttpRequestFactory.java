@@ -150,7 +150,9 @@ public class HttpRequestFactory {
 
 
 	public void handle(Server server, IHttpResponse response) {
-		responseFactory.handle(server,response);
+		responseFactory.findPlugins();
+		IHandler handler = responseFactory.generateHandler(method, uri);
+		handler.handle(server,response);
 		
 	}
 }
