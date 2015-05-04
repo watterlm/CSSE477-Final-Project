@@ -39,22 +39,19 @@ import server.Server;
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
  */
 public class GetRequest extends HttpRequest{
-	String method="";
+	//String method="GET";
 	String uri;
 	String version;
 	Map<String, String> header;
 	char[] body;
 	
 	public GetRequest(){
-		
+		this.method = "GET";
 	}
 
 	@Override
 	public IHttpResponse execute(Server server) {
-//		Map<String, String> header = request.getHeader();
-//		String date = header.get("if-modified-since");
-//		String hostName = header.get("host");
-//		
+	
 		
 		IHttpResponse response;
 		HttpResponseFactory responseFactory = new HttpResponseFactory(server);

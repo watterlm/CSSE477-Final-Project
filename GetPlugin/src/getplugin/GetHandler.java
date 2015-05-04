@@ -1,7 +1,6 @@
 package getplugin;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import protocol.HttpRequest;
@@ -41,6 +40,9 @@ public class GetHandler implements IHandler{
 		String rootDirectory = server.getRootDirectory();
 		// Combine them together to form absolute file path
 		File file = new File(rootDirectory + request.getUri());
+		System.out.println("Looking for file at:");
+		System.out.println(file.getPath());
+		System.out.println();
 		// Check if the file exists
 		if(file.exists()) {
 			if(file.isDirectory()) {

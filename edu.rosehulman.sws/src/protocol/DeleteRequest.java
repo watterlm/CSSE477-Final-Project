@@ -39,14 +39,14 @@ import server.Server;
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
  */
 public class DeleteRequest extends HttpRequest{
-	//String method="";
+	//String method="DELETE";
 	String uri;
 	String version;
 	//Map<String, String> header;
 	//char[] body;
 	
 	public DeleteRequest(){
-		
+		this.method = "DELETE";
 	}
 
 	public IHttpResponse execute(Server server) {

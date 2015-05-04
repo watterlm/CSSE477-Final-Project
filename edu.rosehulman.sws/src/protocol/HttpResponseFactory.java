@@ -65,6 +65,7 @@ public class HttpResponseFactory {
 	};
 
 	public HttpResponseFactory(Server server) {
+		// Set up response types
 		responseMap = new HashMap<Integer, IHttpResponse>();
 		responseMap.put(Protocol.OK_CODE, new OkResponse());
 		responseMap.put(Protocol.MOVED_PERMANENTLY_CODE,
@@ -76,6 +77,8 @@ public class HttpResponseFactory {
 				.put(Protocol.NOT_SUPPORTED_CODE, new NotSupportedResponse());
 		responseMap.put(Protocol.INTERNAL_ERROR_CODE,
 				new InternalErrorResponse());
+		
+		// Set up plugins
 		String rootDirectory = server.getRootDirectory();
 		pluginDirectory = rootDirectory + System.getProperty("file.separator")
 				+ "plugin";
@@ -121,8 +124,8 @@ public class HttpResponseFactory {
 	}
 
 	public IHandler generateHandler(String method, String uri) {
-		// System.out.println(uri);
-		// System.out.println(method);
+		System.out.println(uri);
+		System.out.println(method);
 		if (classMap.containsKey(method)
 				&& classMap.get(method).containsKey(uri)) {
 			IHandler handler = classMap.get(method).get(uri);

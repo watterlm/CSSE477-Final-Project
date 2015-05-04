@@ -39,7 +39,7 @@ import server.Server;
  */
 public abstract class HttpRequest implements IHttpRequest {
 	
-	private String method="";
+	protected String method="";
 	private String uri;
 	private String version;
 	Map<String, String> header;

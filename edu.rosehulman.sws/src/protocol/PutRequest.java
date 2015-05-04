@@ -41,14 +41,14 @@ import server.Server;
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
  */
 public class PutRequest extends HttpRequest{
-	//String method="";
+	//String method="PUT";
 	String uri;
 	String version;
 	//Map<String, String> header;
 	//char[] body;
 	
 	public PutRequest(){
-		
+		this.method = "PUT";
 	}
 
 	@Override

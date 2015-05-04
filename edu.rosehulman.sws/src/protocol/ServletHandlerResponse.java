@@ -64,9 +64,10 @@ public class ServletHandlerResponse {
 		// First status line
 		String line = response.getVersion() + Protocol.SPACE + response.getStatus() + Protocol.SPACE + response.getPhrase() + Protocol.CRLF;
 		out.write(line.getBytes());
+		System.out.print(line);
 		
 		// Write header fields if there is something to write in header field
-		if(response.getHeader() != null && !response.getHeader() .isEmpty()) {
+		if(response.getHeader() != null && !response.getHeader().isEmpty()) {
 			for(Map.Entry<String, String> entry : response.getHeader().entrySet()) {
 				String key = entry.getKey();
 				String value = entry.getValue();
@@ -74,16 +75,19 @@ public class ServletHandlerResponse {
 				// Write each header field line
 				line = key + Protocol.SEPERATOR + Protocol.SPACE + value + Protocol.CRLF;
 				out.write(line.getBytes());
+				System.out.print(line);
 			}
 		}
 
 		
 		//Loop until the outputstream has written the header
-		while(!output.getHasWrittenHeader()){}
+		// TODO: This was hanging it up.
+		//while(!output.getHasWrittenHeader()){}
 		
 		
 		// Write a blank line
 		out.write(Protocol.CRLF.getBytes());
+		System.out.print(Protocol.CRLF);
 
 		// We are reading a file
 		if(response.getStatus() == Protocol.OK_CODE && response.getFile() != null) {
@@ -96,6 +100,7 @@ public class ServletHandlerResponse {
 			// While there is some bytes to read from file, read each chunk and send to the socket out stream
 			while((bytesRead = inStream.read(buffer)) != -1) {
 				out.write(buffer, 0, bytesRead);
+				System.out.print(buffer);
 			}
 			// Close the file input stream, we are done reading
 			inStream.close();

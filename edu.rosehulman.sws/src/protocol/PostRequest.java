@@ -41,14 +41,14 @@ import server.Server;
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
  */
 public class PostRequest extends HttpRequest{
-	//String method="";
+	//String method="POST";
 	String uri;
 	String version;
 	//Map<String, String> header;
 	//char[] body;
 	
 	public PostRequest(){
-		
+		this.method = "POST";
 	}
 
 	/* (non-Javadoc)
