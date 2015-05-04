@@ -28,10 +28,12 @@
  
 package protocol;
 
+import java.io.IOException;
+
 /**
  * 
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
  */
 public interface IHandler {
-	public void handle(IHttpRequest request, ServletHandlerResponse servlet);
+	public void handle(IHttpRequest request, ServletHandlerResponse servlet) throws IOException;
 }
