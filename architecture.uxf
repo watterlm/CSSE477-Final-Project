@@ -4,8 +4,8 @@
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>24</x>
-      <y>16</y>
+      <x>304</x>
+      <y>32</y>
       <w>424</w>
       <h>264</h>
     </coordinates>
@@ -18,8 +18,8 @@ layer=-1</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>24</x>
-      <y>632</y>
+      <x>304</x>
+      <y>648</y>
       <w>440</w>
       <h>224</h>
     </coordinates>
@@ -32,8 +32,8 @@ layer=-1</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>24</x>
-      <y>320</y>
+      <x>304</x>
+      <y>336</y>
       <w>496</w>
       <h>264</h>
     </coordinates>
@@ -46,8 +46,8 @@ layer=-1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>304</x>
-      <y>272</y>
+      <x>584</x>
+      <y>288</y>
       <w>64</w>
       <h>80</h>
     </coordinates>
@@ -58,13 +58,39 @@ depends</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>280</x>
-      <y>576</y>
+      <x>560</x>
+      <y>592</y>
       <w>80</w>
       <h>88</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 implements</panel_attributes>
     <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>816</x>
+      <y>640</y>
+      <w>400</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>plugin
+--
+bg=orange
+layer=-1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>736</x>
+      <y>736</y>
+      <w>96</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+implements</panel_attributes>
+    <additional_attributes>10.0;20.0;100.0;20.0</additional_attributes>
   </element>
 </diagram>
