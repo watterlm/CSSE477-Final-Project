@@ -50,12 +50,11 @@ public class OutputStreamWrapper extends OutputStream{
 	 */
 	@Override
 	public void write(int b) throws IOException {
-		// TODO Auto-generated method stub
-		
+		out.write(b);
 	}
 
 	public void writeHeader(byte[] b) throws IOException{
-		super.write(b);
+		out.write(b);
 		hasWrittenHeader = true;
 	}
 }

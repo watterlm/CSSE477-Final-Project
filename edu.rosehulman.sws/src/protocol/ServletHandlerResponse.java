@@ -100,7 +100,7 @@ public class ServletHandlerResponse {
 			// While there is some bytes to read from file, read each chunk and send to the socket out stream
 			while((bytesRead = inStream.read(buffer)) != -1) {
 				out.write(buffer, 0, bytesRead);
-				System.out.print(buffer);
+				System.out.print(new String(buffer));
 			}
 			// Close the file input stream, we are done reading
 			inStream.close();
