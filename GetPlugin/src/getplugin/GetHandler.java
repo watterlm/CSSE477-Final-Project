@@ -39,7 +39,8 @@ public class GetHandler implements IHandler{
 		// Get root directory path from server
 		String rootDirectory = server.getRootDirectory();
 		// Combine them together to form absolute file path
-		File file = new File(rootDirectory + request.getUri());
+		String uri = request.getUri().substring(request.getUri().indexOf("/", 1));
+		File file = new File(rootDirectory + System.getProperty("file.separator") + "web" + uri);
 		System.out.println("Looking for file at:");
 		System.out.println(file.getPath());
 		System.out.println();
@@ -47,7 +48,7 @@ public class GetHandler implements IHandler{
 		if(file.exists()) {
 			if(file.isDirectory()) {
 				// Look for default index.html file in a directory
-				String location = rootDirectory + request.getUri() + System.getProperty("file.separator") + Protocol.DEFAULT_FILE;
+				String location = rootDirectory + uri + System.getProperty("file.separator") + Protocol.DEFAULT_FILE;
 				file = new File(location);
 				if(file.exists()) {
 					// Lets create 200 OK response

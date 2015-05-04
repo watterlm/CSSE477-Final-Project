@@ -114,7 +114,6 @@ public class HttpResponseFactory {
 					HashMap hash = new HashMap<String, Object>();
 					hash.put(uri, handler);
 					classMap.put(method, hash);
-					System.out.println("Made map");
 				}
 			}
 		} catch (Exception e) {

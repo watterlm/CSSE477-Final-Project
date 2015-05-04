@@ -38,7 +38,8 @@ public class PostHandler implements IHandler{
 		// Get root directory path from server
 		String rootDirectory = server.getRootDirectory();
 		// Combine them together to form absolute file path
-		File file = new File(rootDirectory + request.getUri());
+		String uri = request.getUri().substring(request.getUri().indexOf("/", 1));
+		File file = new File(rootDirectory + System.getProperty("file.separator") +  "web" + uri);
 
 		// Check if the file exists
 		if(file.exists()) {
@@ -50,7 +51,7 @@ public class PostHandler implements IHandler{
 					//if the file exists, append to end of the file
 					try{
 						
-						FileWriter writer = new FileWriter(rootDirectory + request.getUri(),false);
+						FileWriter writer = new FileWriter(rootDirectory + System.getProperty("file.separator") +  "web" + uri,false);
 						writer.write(request.getBody());
 						writer.close();
 					}
@@ -63,7 +64,7 @@ public class PostHandler implements IHandler{
 				}
 				else {
 					try{
-						FileWriter writer = new FileWriter(rootDirectory + request.getUri(),false);
+						FileWriter writer = new FileWriter(rootDirectory + System.getProperty("file.separator") +  "web" + uri,false);
 						writer.write(request.getBody());
 						writer.close();
 					}
@@ -78,7 +79,7 @@ public class PostHandler implements IHandler{
 				
 				//if the file exists, append to end of the file
 				try{
-					FileWriter writer = new FileWriter(rootDirectory + request.getUri(),false);
+					FileWriter writer = new FileWriter(rootDirectory + System.getProperty("file.separator") +  "web" + uri,false);
 					writer.write(request.getBody());
 					writer.close();
 				}
@@ -93,7 +94,7 @@ public class PostHandler implements IHandler{
 		else {//File doesn't exist
 			try{
 				file.createNewFile();
-				FileWriter writer = new FileWriter(rootDirectory + request.getUri(),false);
+				FileWriter writer = new FileWriter(rootDirectory + System.getProperty("file.separator") +  "web" + uri,false);
 				writer.write(request.getBody());
 				writer.close();
 			}
