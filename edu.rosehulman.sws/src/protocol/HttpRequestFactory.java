@@ -29,6 +29,7 @@
 package protocol;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -47,11 +48,13 @@ import server.Server;
 public class HttpRequestFactory {
 	private static Map<String, Object> classMap;
 	private static HttpResponseFactory responseFactory;
+	private static Server server;
 	
 	public HttpRequestFactory(Server server){
 		//This is a map of the request name to the request objects. For adding more
 		//request types, simply add the new request to this map.
 		responseFactory = new HttpResponseFactory(server);
+		this.server = server;
 		classMap = new HashMap<String, Object>();
 		classMap.put("GET", new GetRequest());
 		classMap.put("DELETE", new DeleteRequest());
@@ -159,7 +162,12 @@ public class HttpRequestFactory {
 		
 		OutputStreamWrapper osw = new OutputStreamWrapper(outStream);
 		ServletHandlerResponse shr = new ServletHandlerResponse(osw,blankResponse);
-		handler.handle(request,shr);
+		try {
+			handler.handle(request,shr, server);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }

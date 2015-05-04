@@ -12,10 +12,11 @@ import protocol.IHttpResponse;
 import protocol.InternalErrorResponse;
 import protocol.Protocol;
 import protocol.ServletHandlerResponse;
+import server.Server;
 
 public class myHandler implements IHandler{
 
-	public void handle(IHttpRequest request, ServletHandlerResponse servlet) throws IOException{
+	public void handle(IHttpRequest request, ServletHandlerResponse servlet, Server server) throws IOException{
 		
 		IHttpResponse response = new InternalErrorResponse();
 		servlet.setResponse(response);
