@@ -4,13 +4,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import edu.rosehulman.sws.protocol.HttpResponseFactory;
-import edu.rosehulman.sws.protocol.IHttpResponse;
-import edu.rosehulman.sws.protocol.Protocol;
-import edu.rosehulman.sws.protocol.HttpRequest;
-import edu.rosehulman.sws.protocol.IHandler;
-import edu.rosehulman.sws.protocol.ServletHandlerResponse;
-import edu.rosehulman.sws.protocol.IHttpResponse;
+import protocol.HttpRequest;
+import protocol.HttpResponseFactory;
+import protocol.IHandler;
+import protocol.Protocol;
+import protocol.ServletHandlerResponse;
 
 public class myHandler implements IHandler{
 
