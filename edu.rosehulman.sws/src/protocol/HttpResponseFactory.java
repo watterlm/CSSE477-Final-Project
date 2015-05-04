@@ -47,6 +47,7 @@ import server.Server;
  */
 public class HttpResponseFactory {
 	private static Map<String, Map<String, IHandler>> classMap;
+	private static Map<Integer, IHttpResponse> responseMap;
 	private String pluginDirectory;
 
 	// filter to identify files based on their extensions
@@ -64,21 +65,21 @@ public class HttpResponseFactory {
 	};
 
 	public HttpResponseFactory(Server server) {
-		// TODO: Remove left for reference
-		// classMap = new HashMap<Integer, Object>();
-		// classMap.put(Protocol.OK_CODE, new OkResponse());
-		// classMap.put(Protocol.MOVED_PERMANENTLY_CODE, new
-		// MovedPermanentlyResponse());
-		// classMap.put(Protocol.NOT_MODIFIED_CODE, new NotModifiedResponse());
-		// classMap.put(Protocol.BAD_REQUEST_CODE, new BadRequestResponse());
-		// classMap.put(Protocol.NOT_FOUND_CODE, new NotFoundResponse());
-		// classMap.put(Protocol.NOT_SUPPORTED_CODE, new
-		// NotSupportedResponse());
-		// classMap.put(Protocol.INTERNAL_ERROR_CODE, new
-		// InternalErrorResponse());
+		responseMap = new HashMap<Integer, IHttpResponse>();
+		responseMap.put(Protocol.OK_CODE, new OkResponse());
+		responseMap.put(Protocol.MOVED_PERMANENTLY_CODE,
+				new MovedPermanentlyResponse());
+		responseMap.put(Protocol.NOT_MODIFIED_CODE, new NotModifiedResponse());
+		responseMap.put(Protocol.BAD_REQUEST_CODE, new BadRequestResponse());
+		responseMap.put(Protocol.NOT_FOUND_CODE, new NotFoundResponse());
+		responseMap
+				.put(Protocol.NOT_SUPPORTED_CODE, new NotSupportedResponse());
+		responseMap.put(Protocol.INTERNAL_ERROR_CODE,
+				new InternalErrorResponse());
 		String rootDirectory = server.getRootDirectory();
 		pluginDirectory = rootDirectory + System.getProperty("file.separator")
 				+ "plugin";
+		classMap = new HashMap<String, Map<String, IHandler>>();
 		findPlugins();
 
 	}
@@ -99,17 +100,18 @@ public class HttpResponseFactory {
 				Manifest manifest = jf.getManifest();
 				Attributes att = manifest.getMainAttributes();
 				JSONArray mappings = new JSONArray(att.getValue("pluginList"));
-				for (int i = 1; i < mappings.length(); i++){
+				for (int i = 0; i < mappings.length(); i++) {
 					JSONObject map = (JSONObject) mappings.get(i);
 					String method = (String) map.get("method");
 					String uri = (String) map.get("uri");
 					String obj = (String) map.get("class");
-					
-					IHandler handler = (IHandler) pluginLoader.loadClass(obj).newInstance();					
+
+					IHandler handler = (IHandler) pluginLoader.loadClass(obj)
+							.newInstance();
 					HashMap hash = new HashMap<String, Object>();
 					hash.put(uri, handler);
-					
 					classMap.put(method, hash);
+					System.out.println("Made map");
 				}
 			}
 		} catch (Exception e) {
@@ -117,10 +119,17 @@ public class HttpResponseFactory {
 			System.out.println("Error in loadPluginList: " + e.getMessage());
 		}
 	}
-	
-	public IHandler generateHandler(String method, String uri){
-		IHandler handler = classMap.get(method).get(uri);
-		return handler;
+
+	public IHandler generateHandler(String method, String uri) {
+		// System.out.println(uri);
+		// System.out.println(method);
+		if (classMap.containsKey(method)
+				&& classMap.get(method).containsKey(uri)) {
+			IHandler handler = classMap.get(method).get(uri);
+			return handler;
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -169,7 +178,7 @@ public class HttpResponseFactory {
 
 		// Determine response to create based on response code. Default will
 		// return an internal error
-		response = (IHttpResponse) classMap.get(responseCode);
+		response = (IHttpResponse) responseMap.get(responseCode);
 		if (response == null) {
 			response = new InternalErrorResponse();
 		}
@@ -185,6 +194,5 @@ public class HttpResponseFactory {
 
 		return response;
 	}
-	
-	
+
 }

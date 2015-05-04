@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: PostPlugin
+Bundle-SymbolicName: PostPlugin
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: postplugin.Activator
+Import-Package: org.osgi.framework;version="1.3.0"
+pluginList: [{method: "POST",uri: "/myPostHandler", class: \postplugin.PostHandler}]

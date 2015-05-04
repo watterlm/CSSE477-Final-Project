@@ -54,7 +54,7 @@ public class HttpRequestFactory {
 		//This is a map of the request name to the request objects. For adding more
 		//request types, simply add the new request to this map.
 		responseFactory = new HttpResponseFactory(server);
-		this.server = server;
+		HttpRequestFactory.server = server;
 		classMap = new HashMap<String, Object>();
 		classMap.put("GET", new GetRequest());
 		classMap.put("DELETE", new DeleteRequest());
@@ -156,17 +156,21 @@ public class HttpRequestFactory {
 
 	public void handle(OutputStream outStream, IHttpRequest request) {
 		responseFactory.findPlugins();
-		
-		IHandler handler = responseFactory.generateHandler(request.getMethod(), request.getUri());
-		IHttpResponse blankResponse = null;
-		
-		OutputStreamWrapper osw = new OutputStreamWrapper(outStream);
-		ServletHandlerResponse shr = new ServletHandlerResponse(osw,blankResponse);
-		try {
-			handler.handle(request,shr, server);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		System.out.println(request.getUri());
+		IHandler handler = responseFactory.generateHandler(request.getMethod(), request.getUri().substring(0, request.getUri().indexOf("/", 1)));
+		if (handler != null){
+			IHttpResponse blankResponse = null;
+			
+			OutputStreamWrapper osw = new OutputStreamWrapper(outStream);
+			ServletHandlerResponse shr = new ServletHandlerResponse(osw,blankResponse);
+			try {
+				handler.handle(request,shr, server);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else{
+			responseFactory.createResponse(null, Protocol.CLOSE, 500);
 		}
 		
 	}
