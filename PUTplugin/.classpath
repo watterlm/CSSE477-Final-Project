@@ -3,6 +3,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/watterlm/Documents/CSSE/EclipseWorkspaces/CSSE477-Final-Project/edu.rosehulman.sws/src/protocol"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/edu.rosehulman.sws"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
