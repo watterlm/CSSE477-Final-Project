@@ -75,6 +75,7 @@ public class HttpResponseFactory {
 				.put(Protocol.NOT_SUPPORTED_CODE, new NotSupportedResponse());
 		responseMap.put(Protocol.INTERNAL_ERROR_CODE,
 				new InternalErrorResponse());
+		responseMap.put(Protocol.UNAUTHORIZED_CODE, new UnauthorizedResponse());
 		
 		// Set up plugins
 		String rootDirectory = server.getRootDirectory();

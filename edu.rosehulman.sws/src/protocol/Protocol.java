@@ -65,6 +65,9 @@ public class Protocol {
     public static final int INTERNAL_ERROR_CODE = 500;
     public static final String INTERNAL_ERROR_TEXT = "Internal Error";
 
+    public static final int UNAUTHORIZED_CODE = 403;
+    public static final String UNAUTHORIZED_TEXT = "Unauthorized";
+
     // Some useful header elements in request
     public static final String HOST = "Host";
     public static final String CONNECTION = "Connection";

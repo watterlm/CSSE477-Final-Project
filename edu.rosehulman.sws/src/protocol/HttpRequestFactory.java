@@ -147,7 +147,7 @@ public class HttpRequestFactory {
 					.get(Protocol.CONTENT_LENGTH.toLowerCase()));
 		} catch (Exception e) {
 		}
-		System.out.println("Content length:" + contentLength);
+
 		if (contentLength > 0) {
 			request.body = new char[contentLength];
 			// reader.read(request.body);
@@ -161,46 +161,55 @@ public class HttpRequestFactory {
 	}
 
 	public void handle(OutputStream outStream, IHttpRequest request) {
-		responseFactory.findPlugins();
-		try {
-			String[] uriParts = request.getUri().split("/");
-			if (uriParts.length > 2){
-			
-				IHandler handler = responseFactory.generateHandler(
-						request.getMethod(),
-						request.getUri().substring(0,
-								request.getUri().indexOf("/", 1)));
-				if (handler != null) {
-					IHttpResponse blankResponse = null;
-	
-					OutputStreamWrapper osw = new OutputStreamWrapper(outStream);
-					ServletHandlerResponse shr = new ServletHandlerResponse(osw,
-							blankResponse);
-					try {
-						handler.handle(request, shr, server);
-					} catch (IOException e) {
-						e.printStackTrace();
+		if (request.getUri().contains("..") || request.getUri().contains("~")) {
+			IHttpResponse response = responseFactory.createResponse(null,
+					Protocol.CLOSE, Protocol.UNAUTHORIZED_CODE);
+			writeResponse(outStream, response);
+		} else {
+			responseFactory.findPlugins();
+			try {
+				String[] uriParts = request.getUri().split("/");
+				if (uriParts.length > 2) {
+
+					IHandler handler = responseFactory.generateHandler(
+							request.getMethod(),
+							request.getUri().substring(0,
+									request.getUri().indexOf("/", 1)));
+					if (handler != null) {
+						IHttpResponse blankResponse = null;
+
+						OutputStreamWrapper osw = new OutputStreamWrapper(
+								outStream);
+						ServletHandlerResponse shr = new ServletHandlerResponse(
+								osw, blankResponse);
+						try {
+							handler.handle(request, shr, server);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					} else {
+						IHttpResponse response = responseFactory
+								.createResponse(null, Protocol.CLOSE,
+										Protocol.BAD_REQUEST_CODE);
+						writeResponse(outStream, response);
 					}
 				} else {
-					IHttpResponse response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
+					System.out.println("Using default request");
+					IHttpResponse response = request.execute(server);
 					writeResponse(outStream, response);
 				}
-			} else {
-				System.out.println("Using default request");
-				IHttpResponse response = request.execute(server);
+			} catch (Exception e) {
+				IHttpResponse response = responseFactory.createResponse(null,
+						Protocol.CLOSE, Protocol.INTERNAL_ERROR_CODE);
 				writeResponse(outStream, response);
 			}
-		} catch (Exception e) {
-			IHttpResponse response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.INTERNAL_ERROR_CODE);
-			writeResponse(outStream, response);
 		}
 
 	}
-	
-	private void writeResponse(OutputStream outStream, IHttpResponse response){
+
+	private void writeResponse(OutputStream outStream, IHttpResponse response) {
 		OutputStreamWrapper osw = new OutputStreamWrapper(outStream);
-		ServletHandlerResponse shr = new ServletHandlerResponse(osw,
-				response);
+		ServletHandlerResponse shr = new ServletHandlerResponse(osw, response);
 		try {
 			shr.write();
 		} catch (IOException e) {
@@ -209,5 +218,3 @@ public class HttpRequestFactory {
 		}
 	}
 }
-
-
