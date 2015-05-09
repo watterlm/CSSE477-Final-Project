@@ -89,10 +89,8 @@ public class HttpResponseFactory {
 		File pluginFolder = new File(pluginDirectory);
 
 		try {
-			System.out.println("finding plugins");
 			for (File f : pluginFolder.listFiles(JAR_FILTER)) {
 				ClassLoader pluginLoader;
-				System.out.println("Name:" + f.getName());
 				pluginLoader = URLClassLoader.newInstance(new URL[] { f.toURI()
 						.toURL() });
 
@@ -121,8 +119,6 @@ public class HttpResponseFactory {
 	}
 
 	public IHandler generateHandler(String method, String uri) {
-		System.out.println(uri);
-		System.out.println(method);
 		if (classMap.containsKey(method)
 				&& classMap.get(method).containsKey(uri)) {
 			IHandler handler = classMap.get(method).get(uri);

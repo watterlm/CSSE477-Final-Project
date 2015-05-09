@@ -162,30 +162,52 @@ public class HttpRequestFactory {
 
 	public void handle(OutputStream outStream, IHttpRequest request) {
 		responseFactory.findPlugins();
-		System.out.println(request.getUri());
 		try {
-			IHandler handler = responseFactory.generateHandler(
-					request.getMethod(),
-					request.getUri().substring(0,
-							request.getUri().indexOf("/", 1)));
-			if (handler != null) {
-				IHttpResponse blankResponse = null;
-
-				OutputStreamWrapper osw = new OutputStreamWrapper(outStream);
-				ServletHandlerResponse shr = new ServletHandlerResponse(osw,
-						blankResponse);
-				try {
-					handler.handle(request, shr, server);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			String[] uriParts = request.getUri().split("/");
+			if (uriParts.length > 2){
+			
+				IHandler handler = responseFactory.generateHandler(
+						request.getMethod(),
+						request.getUri().substring(0,
+								request.getUri().indexOf("/", 1)));
+				if (handler != null) {
+					IHttpResponse blankResponse = null;
+	
+					OutputStreamWrapper osw = new OutputStreamWrapper(outStream);
+					ServletHandlerResponse shr = new ServletHandlerResponse(osw,
+							blankResponse);
+					try {
+						handler.handle(request, shr, server);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} else {
+					IHttpResponse response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
+					writeResponse(outStream, response);
 				}
 			} else {
-				responseFactory.createResponse(null, Protocol.CLOSE, 500);
+				System.out.println("Using default request");
+				IHttpResponse response = request.execute(server);
+				writeResponse(outStream, response);
 			}
 		} catch (Exception e) {
-
+			IHttpResponse response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.INTERNAL_ERROR_CODE);
+			writeResponse(outStream, response);
 		}
 
 	}
+	
+	private void writeResponse(OutputStream outStream, IHttpResponse response){
+		OutputStreamWrapper osw = new OutputStreamWrapper(outStream);
+		ServletHandlerResponse shr = new ServletHandlerResponse(osw,
+				response);
+		try {
+			shr.write();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
+
+

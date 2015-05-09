@@ -39,11 +39,6 @@ import server.Server;
  * @author Chandan R. Rupakheti (rupakhcr@clarkson.edu)
  */
 public class GetRequest extends HttpRequest{
-	//String method="GET";
-	String uri;
-	String version;
-	Map<String, String> header;
-	char[] body;
 	
 	public GetRequest(){
 		this.method = "GET";
@@ -61,12 +56,14 @@ public class GetRequest extends HttpRequest{
 		// Get root directory path from server
 		String rootDirectory = server.getRootDirectory();
 		// Combine them together to form absolute file path
-		File file = new File(rootDirectory + uri);
+		String filepath = rootDirectory + System.getProperty("file.separator") + "web" + this.uri; 
+		System.out.println(filepath);
+		File file = new File(filepath);
 		// Check if the file exists
 		if(file.exists()) {
 			if(file.isDirectory()) {
 				// Look for default index.html file in a directory
-				String location = rootDirectory + uri + System.getProperty("file.separator") + Protocol.DEFAULT_FILE;
+				String location = filepath + System.getProperty("file.separator") + Protocol.DEFAULT_FILE;
 				file = new File(location);
 				if(file.exists()) {
 					// Lets create 200 OK response
