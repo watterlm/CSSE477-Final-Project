@@ -49,6 +49,7 @@ public class Server implements Runnable {
 	private String cacheLocation;
 	private int backupNumber;
 	private String backupFolder;
+	private String[] systemFiles = { "index.html", "upload.html" };
 	
 	private long connections;
 	private long serviceTime;
@@ -75,9 +76,22 @@ public class Server implements Runnable {
 		backupSES.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
+				System.out.println("Backing up");
 				backup();
 			}
-		}, 0, 1, TimeUnit.HOURS);
+		}, 0, 3, TimeUnit.HOURS);
+		
+		// Schedule the change/deleteion of system files to run every 20 sec and delay the first run by 20 secs
+		ScheduledExecutorService  fileCheckerSES = Executors.newSingleThreadScheduledExecutor();
+		fileCheckerSES.scheduleAtFixedRate(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println("Checking System Files");
+				for (String file : systemFiles){
+					checkFileChangeOrDelete(file);
+				}
+			}
+		}, 20, 20, TimeUnit.SECONDS);
 	}
 
 	/**
@@ -194,17 +208,72 @@ public class Server implements Runnable {
 	}
 	
 	private void backup(){
+		// Get the current directory to back up and the directory to back up to
 		File folderToBackup = new File(this.backupFolder);
 		File backupFolder = new File(this.backupLocation + this.backupNumber);
+		
+		// Increment backup number so that the next time it stores it in the next backup folder
+		// There are 3 total backup folders
 		this.backupNumber++;
 		if (this.backupNumber > 3){
 			this.backupNumber = 1;
 		}
 
+		// Copy the current directory to the backup location.
 		try {
 		    FileUtils.copyDirectory(folderToBackup, backupFolder);
 		} catch (IOException e) {
-		    e.printStackTrace();
+			System.out.println("Error in backup: " + e.getMessage());
+		}
+	}
+	
+	private void checkFileChangeOrDelete(String fileName){
+		String filepath = backupFolder + System.getProperty("file.separator") + fileName;
+		File currentFile = new File(filepath);
+		
+		// Get the backed up version
+		int num = this.backupNumber;
+		num--;
+		if (num < 1){
+			num = 3;
+		}
+		
+		// Get the backed up file
+		File lastBackup = new File(this.backupLocation + num + System.getProperty("file.separator") + fileName);
+		
+		// Check if the current system file exists
+		if(currentFile.exists()){
+			// Get the last modified dates of each file
+			Long currentLastModified = currentFile.lastModified();
+			Long lastLastModified = lastBackup.lastModified();
+			
+			// If the current file has been modified restore it
+			if(currentLastModified > lastLastModified){
+				System.out.println("Detected change in: " + fileName);
+				restoreChangedOrDeletedFile(currentFile, lastBackup);
+			}
+		} else {
+			// It was deleted so restore it
+			System.out.println("Detected deletion of: " + fileName);
+			restoreChangedOrDeletedFile(currentFile, lastBackup);
+		}
+		
+		
+	}
+	
+	private void restoreChangedOrDeletedFile(File currentFile, File backupFile){
+		// Check to see if the currentFile is null (
+		if (currentFile.exists()){
+			currentFile.delete();
+		}
+		// Get the directory to restore to
+		File currentDirectory = new File(currentFile.getPath());
+		try {
+			// Copy the backup file to the current directory
+			FileUtils.copyFile(backupFile, currentDirectory);
+			System.out.println("Restored file: " + currentFile.getPath());
+		} catch (IOException e) {
+			System.out.println("Error in restoring file: " + e.getMessage());
 		}
 	}
 }
