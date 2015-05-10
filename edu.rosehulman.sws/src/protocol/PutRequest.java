@@ -59,7 +59,9 @@ public class PutRequest extends HttpRequest{
 		// Get root directory path from server
 		String rootDirectory = server.getRootDirectory();
 		// Combine them together to form absolute file path
-		File file = new File(rootDirectory + uri);
+		String filepath = rootDirectory + System.getProperty("file.separator") + "web" + this.uri; 
+		File file = new File(filepath);
+		
 		System.out.print("body in execute: ");
 		for (int i=0;i<body.length;i++)
 			System.out.print(body[i]);
@@ -68,12 +70,12 @@ public class PutRequest extends HttpRequest{
 		if(file.exists()) {
 			if(file.isDirectory()) {
 				// Look for default index.html file in a directory
-				String location = rootDirectory + uri + System.getProperty("file.separator") + Protocol.DEFAULT_FILE;
+				String location = filepath + System.getProperty("file.separator") + Protocol.DEFAULT_FILE;
 				file = new File(location);
 				if(file.exists()) {
 					//if the file exists, append to end of the file
 					try{
-						FileWriter writer = new FileWriter(rootDirectory + uri,true);
+						FileWriter writer = new FileWriter(location,true);
 						writer.write(body);
 						writer.close();
 					}
@@ -86,7 +88,7 @@ public class PutRequest extends HttpRequest{
 				}
 				else {
 					try{
-						FileWriter writer = new FileWriter(rootDirectory + uri,false);
+						FileWriter writer = new FileWriter(location,false);
 						writer.write(body);
 						writer.close();
 					}
@@ -101,7 +103,7 @@ public class PutRequest extends HttpRequest{
 				
 				//if the file exists, append to end of the file
 				try{
-					FileWriter writer = new FileWriter(rootDirectory + uri,true);
+					FileWriter writer = new FileWriter(filepath,true);
 					writer.write(body);
 					writer.close();
 				}
@@ -116,7 +118,7 @@ public class PutRequest extends HttpRequest{
 		else {//File doesn't exist
 			try{
 				file.createNewFile();
-				FileWriter writer = new FileWriter(rootDirectory + uri,false);
+				FileWriter writer = new FileWriter(filepath,false);
 				writer.write(body);
 				writer.close();
 			}

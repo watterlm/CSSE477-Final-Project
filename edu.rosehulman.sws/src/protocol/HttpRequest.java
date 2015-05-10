@@ -40,8 +40,8 @@ import server.Server;
 public abstract class HttpRequest implements IHttpRequest {
 	
 	protected String method="";
-	private String uri;
-	private String version;
+	protected String uri;
+	protected String version;
 	Map<String, String> header;
 	char[] body;
 	
