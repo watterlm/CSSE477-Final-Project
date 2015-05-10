@@ -23,9 +23,16 @@ package server;
 
 import gui.WebServer;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.io.FileUtils;
 
 /**
  * This represents a welcoming server for the incoming
@@ -38,6 +45,10 @@ public class Server implements Runnable {
 	private int port;
 	private boolean stop;
 	private ServerSocket welcomeSocket;
+	private String backupLocation;
+	private String cacheLocation;
+	private int backupNumber;
+	private String backupFolder;
 	
 	private long connections;
 	private long serviceTime;
@@ -49,11 +60,24 @@ public class Server implements Runnable {
 	 */
 	public Server(String rootDirectory, int port, WebServer window) {
 		this.rootDirectory = rootDirectory;
+		this.backupLocation = rootDirectory + System.getProperty("file.separator") + "backup";
+		this.backupNumber = 1;
+		this.cacheLocation = rootDirectory + System.getProperty("file.separator") + "cache";
+		this.backupFolder = rootDirectory + System.getProperty("file.separator") + "web";
 		this.port = port;
 		this.stop = false;
 		this.connections = 0;
 		this.serviceTime = 0;
 		this.window = window;
+		
+		// Schedule the backups for every three hours and run the first backup
+		ScheduledExecutorService  backupSES = Executors.newSingleThreadScheduledExecutor();
+		backupSES.scheduleAtFixedRate(new Runnable() {
+			@Override
+			public void run() {
+				backup();
+			}
+		}, 0, 1, TimeUnit.HOURS);
 	}
 
 	/**
@@ -167,5 +191,20 @@ public class Server implements Runnable {
 		if(this.welcomeSocket != null)
 			return this.welcomeSocket.isClosed();
 		return true;
+	}
+	
+	private void backup(){
+		File folderToBackup = new File(this.backupFolder);
+		File backupFolder = new File(this.backupLocation + this.backupNumber);
+		this.backupNumber++;
+		if (this.backupNumber > 3){
+			this.backupNumber = 1;
+		}
+
+		try {
+		    FileUtils.copyDirectory(folderToBackup, backupFolder);
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
 	}
 }
