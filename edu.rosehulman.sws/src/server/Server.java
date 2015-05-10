@@ -28,6 +28,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -46,13 +49,15 @@ public class Server implements Runnable {
 	private boolean stop;
 	private ServerSocket welcomeSocket;
 	private String backupLocation;
-	private String cacheLocation;
 	private int backupNumber;
 	private String backupFolder;
 	private String[] systemFiles = { "index.html", "upload.html" };
 	
 	private long connections;
 	private long serviceTime;
+	
+	// Cache Format: Filename, [String body of file, String representation of a long for time last accessed]
+	private Map<String, ArrayList<String>> cacheDictionary;
 	
 	private WebServer window;
 	/**
@@ -63,7 +68,6 @@ public class Server implements Runnable {
 		this.rootDirectory = rootDirectory;
 		this.backupLocation = rootDirectory + System.getProperty("file.separator") + "backup";
 		this.backupNumber = 1;
-		this.cacheLocation = rootDirectory + System.getProperty("file.separator") + "cache";
 		this.backupFolder = rootDirectory + System.getProperty("file.separator") + "web";
 		this.port = port;
 		this.stop = false;
@@ -71,8 +75,10 @@ public class Server implements Runnable {
 		this.serviceTime = 0;
 		this.window = window;
 		
+		cacheDictionary = new HashMap<String, ArrayList<String>>();
+		
 		// Schedule the backups for every three hours and run the first backup
-		ScheduledExecutorService  backupSES = Executors.newSingleThreadScheduledExecutor();
+		ScheduledExecutorService backupSES = Executors.newSingleThreadScheduledExecutor();
 		backupSES.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
@@ -82,7 +88,7 @@ public class Server implements Runnable {
 		}, 0, 3, TimeUnit.HOURS);
 		
 		// Schedule the change/deleteion of system files to run every 20 sec and delay the first run by 20 secs
-		ScheduledExecutorService  fileCheckerSES = Executors.newSingleThreadScheduledExecutor();
+		ScheduledExecutorService fileCheckerSES = Executors.newSingleThreadScheduledExecutor();
 		fileCheckerSES.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
@@ -92,6 +98,16 @@ public class Server implements Runnable {
 				}
 			}
 		}, 20, 20, TimeUnit.SECONDS);
+		
+		// Schedule the cache cleaning for every 5 seconds to attempt to capture the cache not being used for 10 seconds. Delayed by 5 seconds.
+		ScheduledExecutorService cacheCleanerSES = Executors.newSingleThreadScheduledExecutor();
+		cacheCleanerSES.scheduleAtFixedRate(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println("Cleaning Cache");
+				cleanCache();
+			}
+		}, 5, 5, TimeUnit.SECONDS);
 	}
 
 	/**
@@ -274,6 +290,19 @@ public class Server implements Runnable {
 			System.out.println("Restored file: " + currentFile.getPath());
 		} catch (IOException e) {
 			System.out.println("Error in restoring file: " + e.getMessage());
+		}
+	}
+	
+	private void cleanCache(){
+		for (String key: cacheDictionary.keySet()){
+			ArrayList<String> values = cacheDictionary.get(key);
+			Long lastAccessed = Long.parseLong(values.get(2));
+			Long currentTime = System.currentTimeMillis();
+			int differenceInSeconds = (int)((currentTime - lastAccessed)/1000);
+			if(differenceInSeconds >= 10){
+				System.out.println("Removed from cache: " + key);
+				cacheDictionary.remove(key);
+			}
 		}
 	}
 }

@@ -150,36 +150,10 @@ public class ConnectionHandler implements Runnable {
 				}
 			}
 			else{
-				//Changed executing the response to a method within each of the request classes. 
-				//This will allow further commands to be added without editing ConnectionHandler.
-				/*
-				System.out.print("body: ");
-				for (int i=0;i<request.getBody().length;i++)
-					System.out.print(request.getBody()[i]);
-				System.out.println();
-				*/
-				
-				
 				//Changed the execute from the request to the IHandler
 				//Response is sent in the SHR
-				
-				//response = request.execute(server);
 				requestFactory.handle(outStream,request);
 			}
-			/*
-			else if(request.getMethod().equalsIgnoreCase(Protocol.GET)) {
-				response = request.execute(server);
-			}
-			else if(request.getMethod().equalsIgnoreCase(Protocol.PUT)){
-				
-			}
-			else if(request.getMethod().equalsIgnoreCase(Protocol.POST)){ 
-				
-			}
-			else if(request.getMethod().equalsIgnoreCase(Protocol.DELETE)){ 
-				response = request.execute(server);
-			}
-			*/
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -209,5 +183,7 @@ public class ConnectionHandler implements Runnable {
 		// Get the end time
 		long end = System.currentTimeMillis();
 		this.server.incrementServiceTime(end-start);
+
+		System.out.println("\nLatency: "+ (end - start) + "ms");
 	}
 }
