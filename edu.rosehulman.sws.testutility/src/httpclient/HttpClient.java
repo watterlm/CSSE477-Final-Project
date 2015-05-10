@@ -198,8 +198,8 @@ public class HttpClient extends javax.swing.JFrame {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	
             	//Change to whichever message we want to send
-                butGeneratePersistentActionPerformedGET(evt);
-                //butGeneratePersistentActionPerformedPUT(evt);
+                //butGeneratePersistentActionPerformedGET(evt);
+                butGeneratePersistentActionPerformedPUT(evt);
                 //butGeneratePersistentActionPerformedPOST(evt);
                 //butGeneratePersistentActionPerformedDELETE(evt);
             }
