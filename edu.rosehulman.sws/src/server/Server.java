@@ -25,17 +25,29 @@ import gui.WebServer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
+
+import protocol.HttpRequestFactory;
+import protocol.HttpResponseFactory;
+import protocol.IHttpRequest;
+import protocol.IHttpResponse;
+import protocol.Protocol;
+import protocol.ProtocolException;
+import protocol.User;
 
 /**
  * This represents a welcoming server for the incoming
@@ -55,6 +67,7 @@ public class Server implements Runnable {
 	
 	private long connections;
 	private long serviceTime;
+	private Map<String,User> users;
 	
 	// Cache Format: Filename, [String body of file, String representation of a long for time last accessed]
 	private Map<String, ArrayList<String>> cacheDictionary;
@@ -77,7 +90,8 @@ public class Server implements Runnable {
 		this.connections = 0;
 		this.serviceTime = 0;
 		this.window = window;
-		
+	
+		users = new HashMap<String, User>();
 		cacheDictionary = new HashMap<String, ArrayList<String>>();
 		accessTracker = new HashMap<String, ArrayList<String>>();
 		
@@ -121,6 +135,24 @@ public class Server implements Runnable {
 				cleanAccess();
 			}
 		}, 10, 10, TimeUnit.SECONDS);
+		
+		// Schedule running additional requests every .1 seconds. Delayed by 1 second.
+		ScheduledExecutorService requestQueueSES = Executors.newSingleThreadScheduledExecutor();
+		accessCleanerSES.scheduleAtFixedRate(new Runnable() {
+			@Override
+			public void run() {
+				while(handleNextRequest());
+			}
+		}, 1000, 100, TimeUnit.MILLISECONDS);
+		
+		// Schedule running additional requests every 1 minute. Delayed by 1 minute.
+		ScheduledExecutorService clearUserHistorySES = Executors.newSingleThreadScheduledExecutor();
+		accessCleanerSES.scheduleAtFixedRate(new Runnable() {
+			@Override
+			public void run() {
+				clearUserHistory();
+			}
+		}, 1, 1, TimeUnit.MINUTES);
 	}
 
 	/**
@@ -195,9 +227,102 @@ public class Server implements Runnable {
 				if(this.stop)
 					break;
 				
+				
+				
+				//New functionality from connectionHandler
+				OutputStream outStream = null;
+				InputStream inStream = null;
+				try {
+					inStream = connectionSocket.getInputStream();
+					outStream = connectionSocket.getOutputStream();
+				}
+				catch(Exception e) {
+					// Cannot do anything if we have exception reading input or output stream
+					// May be have text to log this for further analysis?
+					e.printStackTrace();
+					
+					// Increment number of connections by 1
+					this.incrementConnections(1);
+					// Get the end time
+					long end = System.currentTimeMillis();
+					return;
+				}
+				
+				IHttpRequest request = null;
+				HttpRequestFactory requestFactory = new HttpRequestFactory(this);
+				try {
+					
+					request = requestFactory.read(inStream);
+					System.out.println(request);
+				}
+				catch(ProtocolException pe) {
+					// We have some sort of protocol exception. Get its status code and create response
+					// We know only two kind of exception is possible inside fromInputStream
+					// Protocol.BAD_REQUEST_CODE and Protocol.NOT_SUPPORTED_CODE
+					int status = pe.getStatus();
+					if(status == Protocol.BAD_REQUEST_CODE) {
+						HttpResponseFactory responseFactory = new HttpResponseFactory(this);
+						IHttpResponse response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
+						try {
+							response.write(outStream);
+//							System.out.println(response);
+						}
+						catch(Exception e){
+							// We will ignore this exception
+							e.printStackTrace();
+						}
+
+						// Increment number of connections by 1
+						this.incrementConnections(1);
+						return;
+					}
+					// TODO: Handle version not supported code as well
+				}
+				////////////////////////////
+			
 				// Create a handler for this incoming connection and start the handler in a new thread
-				ConnectionHandler handler = new ConnectionHandler(this, connectionSocket);
-				new Thread(handler).start();
+				ConnectionHandler handler = new ConnectionHandler(this, connectionSocket, request);
+				
+				//System.out.println("IP:"+connectionSocket.getInetAddress().toString());
+				String ip = connectionSocket.getInetAddress().toString();
+				System.out.println(ip);
+				if(users.containsKey(ip)){
+					System.out.println("old user");
+					User oldUser = users.get(ip);
+					if(oldUser.addToQueue(handler)){
+						oldUser.incrementRequest();
+						System.out.println("Old user numRequests:" + oldUser.getRequests());
+					}
+					else{
+						//exceeded queue size
+						HttpResponseFactory responseFactory = new HttpResponseFactory(this);
+						IHttpResponse response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
+						try {
+							response.write(outStream);
+						}
+						catch(Exception e){
+							// We will ignore this exception
+							e.printStackTrace();
+						}
+
+						// Increment number of connections by 1
+						this.incrementConnections(1);
+						return;
+					}
+				}
+				else{
+					System.out.println("new user");
+					User newUser = new User(ip);
+					System.out.println("check");
+					newUser.addToQueue(handler);
+					newUser.incrementRequest();
+					
+					users.put(ip, newUser);
+					
+				}
+				//Execute handler
+				//new Thread(handler).start();
+				//handleNextRequest();
 			}
 			this.welcomeSocket.close();
 		}
@@ -356,5 +481,39 @@ public class Server implements Runnable {
 		ArrayList<String> attributes = cacheDictionary.get(filename);
 		String body = attributes.get(0);
 		return body;
+	}
+	
+	private boolean handleNextRequest(){
+		if(users.size() < 1)
+			return false;
+		//System.out.println("checking for next user");
+		
+		
+		int min=1000;
+		User best = null;
+		
+		for (User nextUser: users.values())
+		{
+			int num = nextUser.getNumRequestsQueued();
+			if(num < min && !nextUser.isOverLimit()){
+				best = nextUser;
+				min = num;
+			}
+		}
+		
+		if(best==null)
+			return false;
+		ConnectionHandler handler = best.getNextRequest();
+		if(handler == null)
+			return false;
+		new Thread(handler).start();
+		return true;
+	}
+	
+	private void clearUserHistory(){
+		for (User nextUser: users.values())
+		{
+			nextUser.clearRequests();
+		}
 	}
 }

@@ -29,6 +29,7 @@ import java.net.Socket;
 import protocol.HttpRequest;
 import protocol.HttpRequestFactory;
 import protocol.HttpResponseFactory;
+import protocol.IHttpRequest;
 import protocol.IHttpResponse;
 import protocol.Protocol;
 import protocol.ProtocolException;
@@ -44,10 +45,12 @@ import protocol.ProtocolException;
 public class ConnectionHandler implements Runnable {
 	private Server server;
 	private Socket socket;
+	private IHttpRequest request;
 	
-	public ConnectionHandler(Server server, Socket socket) {
+	public ConnectionHandler(Server server, Socket socket, IHttpRequest request) {
 		this.server = server;
 		this.socket = socket;
+		this.request = request;
 	}
 	
 	/**
@@ -90,10 +93,11 @@ public class ConnectionHandler implements Runnable {
 		
 		// At this point we have the input and output stream of the socket
 		// Now lets create a HttpRequest object
-		HttpRequest request = null;
+		//IHttpRequest request = null;
 		IHttpResponse response = null;
 		HttpResponseFactory responseFactory = new HttpResponseFactory(server);
 		HttpRequestFactory requestFactory = new HttpRequestFactory(server);
+		/*
 		try {
 			
 			request = requestFactory.read(inStream);
@@ -135,6 +139,8 @@ public class ConnectionHandler implements Runnable {
 			this.server.incrementServiceTime(end-start);
 			return;
 		}
+		*/
+		
 		
 		// We reached here means no error so far, so lets process further
 		try {
