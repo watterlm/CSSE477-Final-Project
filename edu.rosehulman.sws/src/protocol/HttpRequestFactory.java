@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,6 +50,9 @@ public class HttpRequestFactory {
 	private static Map<String, Object> classMap;
 	private static HttpResponseFactory responseFactory;
 	private static Server server;
+	
+	// Access Format: Filename, [String representation of a long for time last accessed, String representation of times accessed]
+	private static Map<String, ArrayList<String>> accessTracker;
 
 	public HttpRequestFactory(Server server) {
 		// This is a map of the request name to the request objects. For adding
@@ -61,6 +65,7 @@ public class HttpRequestFactory {
 		classMap.put("DELETE", new DeleteRequest());
 		classMap.put("POST", new PostRequest());
 		classMap.put("PUT", new PutRequest());
+		accessTracker = new HashMap<String, ArrayList<String>>();
 	}
 
 	// TODO: FIX, should not call private attributes of request
@@ -97,6 +102,26 @@ public class HttpRequestFactory {
 
 		request.setUri(tokenizer.nextToken()); // /somedir/page.html
 		request.setVersion(tokenizer.nextToken()); // HTTP/1.1
+		
+		accessTracker = server.getAccessTracker();
+		if (method.toLowerCase().equals("get") && !server.isCached(request.getUri())){
+			if(accessTracker.containsKey(request.getUri())){
+				ArrayList<String> attributes = accessTracker.get(request.getUri());
+				System.out.println(attributes);
+				attributes.set(0, System.currentTimeMillis() + "");
+				attributes.set(1, (Integer.parseInt(attributes.get(1)) + 1) + "");
+				accessTracker.put(request.getUri(), attributes);
+				System.out.println("Updated key");
+			} else {
+				ArrayList<String> attributes = new ArrayList<String>();
+				attributes.add(System.currentTimeMillis() + "");
+				attributes.add(0 + "");
+				accessTracker.put(request.getUri(), attributes);
+				System.out.println("Added key");
+			}
+			server.updateAccessTracker(accessTracker);
+			System.out.println(accessTracker);
+		}
 
 		// Rest of the request is a header that maps keys to values
 		// e.g. Host: www.rose-hulman.edu
@@ -194,9 +219,27 @@ public class HttpRequestFactory {
 						writeResponse(outStream, response);
 					}
 				} else {
-					System.out.println("Using default request");
-					IHttpResponse response = request.execute(server);
-					writeResponse(outStream, response);
+					System.out.println("Using default request");					
+					accessTracker = server.getAccessTracker();
+					if (accessTracker.containsKey(request.getUri()) && Integer.parseInt(accessTracker.get(request.getUri()).get(1)) >= 20 && request.getMethod().toLowerCase().equals("get")){
+						System.out.println("Adding to the cache.");
+						((GetRequest)request).setNeedsCaching(true);
+						IHttpResponse response = request.execute(server);
+						server.addToCache(request.getUri(), response.getBody());
+						
+						// Update attributes
+						ArrayList<String> attributes = accessTracker.get(request.getUri());
+						System.out.println(attributes);
+						attributes.set(0, System.currentTimeMillis() + "");
+						attributes.set(1, 0 + "");
+						accessTracker.put(request.getUri(), attributes);
+						server.updateAccessTracker(accessTracker);
+
+						writeResponse(outStream, response);
+					}else{
+						IHttpResponse response = request.execute(server);
+						writeResponse(outStream, response);
+					}
 				}
 			} catch (Exception e) {
 				IHttpResponse response = responseFactory.createResponse(null,

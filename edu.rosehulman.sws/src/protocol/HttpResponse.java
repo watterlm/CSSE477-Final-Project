@@ -40,6 +40,7 @@ public class HttpResponse implements IHttpResponse {
 	private String phrase;
 	private Map<String, String> header;
 	protected File file;
+	private String body;
 
 	
 	/**
@@ -57,6 +58,7 @@ public class HttpResponse implements IHttpResponse {
 		this.phrase = phrase;
 		this.header = header;
 		this.file = file;
+		this.body = "";
 	}
 
 	/**
@@ -154,6 +156,8 @@ public class HttpResponse implements IHttpResponse {
 			}
 			// Close the file input stream, we are done reading
 			inStream.close();
+		} else if (this.getStatus() == Protocol.OK_CODE && !body.equals("")){
+			out.write(this.body.getBytes());
 		}
 		
 		// Flush the data so that outStream sends everything through the socket 
@@ -199,6 +203,23 @@ public class HttpResponse implements IHttpResponse {
 	@Override
 	public void setFile(File file) {
 		this.file = file;
+	}
+
+	/* (non-Javadoc)
+	 * @see protocol.IHttpResponse#setBody(java.lang.String)
+	 */
+	@Override
+	public void setBody(String body) {
+		this.body = body;
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see protocol.IHttpResponse#getBody()
+	 */
+	@Override
+	public String getBody() {
+		return this.body;
 	}
 	
 }

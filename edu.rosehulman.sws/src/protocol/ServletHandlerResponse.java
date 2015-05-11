@@ -104,6 +104,11 @@ public class ServletHandlerResponse {
 			}
 			// Close the file input stream, we are done reading
 			inStream.close();
+		}else if (response.getStatus() == Protocol.OK_CODE && !response.getBody().equals("")){
+			out.write(response.getBody().getBytes());
+			System.out.println(response.getBody());
+		}else{
+			System.out.println("Both were null");
 		}
 		
 		// Flush the data so that outStream sends everything through the socket 

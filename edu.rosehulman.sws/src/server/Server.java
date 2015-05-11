@@ -59,6 +59,9 @@ public class Server implements Runnable {
 	// Cache Format: Filename, [String body of file, String representation of a long for time last accessed]
 	private Map<String, ArrayList<String>> cacheDictionary;
 	
+	// Access Format: Filename, [String representation of a long for time last accessed, String representation of times accessed]
+	private static Map<String, ArrayList<String>> accessTracker;
+	
 	private WebServer window;
 	/**
 	 * @param rootDirectory
@@ -76,6 +79,7 @@ public class Server implements Runnable {
 		this.window = window;
 		
 		cacheDictionary = new HashMap<String, ArrayList<String>>();
+		accessTracker = new HashMap<String, ArrayList<String>>();
 		
 		// Schedule the backups for every three hours and run the first backup
 		ScheduledExecutorService backupSES = Executors.newSingleThreadScheduledExecutor();
@@ -108,6 +112,15 @@ public class Server implements Runnable {
 				cleanCache();
 			}
 		}, 5, 5, TimeUnit.SECONDS);
+		
+		// Schedule the cache cleaning for every 5 seconds to attempt to capture the cache not being used for 10 seconds. Delayed by 5 seconds.
+		ScheduledExecutorService accessCleanerSES = Executors.newSingleThreadScheduledExecutor();
+		accessCleanerSES.scheduleAtFixedRate(new Runnable() {
+			@Override
+			public void run() {
+				cleanAccess();
+			}
+		}, 10, 10, TimeUnit.SECONDS);
 	}
 
 	/**
@@ -296,7 +309,7 @@ public class Server implements Runnable {
 	private void cleanCache(){
 		for (String key: cacheDictionary.keySet()){
 			ArrayList<String> values = cacheDictionary.get(key);
-			Long lastAccessed = Long.parseLong(values.get(2));
+			Long lastAccessed = Long.parseLong(values.get(1));
 			Long currentTime = System.currentTimeMillis();
 			int differenceInSeconds = (int)((currentTime - lastAccessed)/1000);
 			if(differenceInSeconds >= 10){
@@ -304,5 +317,44 @@ public class Server implements Runnable {
 				cacheDictionary.remove(key);
 			}
 		}
+	}
+	
+	private void cleanAccess(){
+		for (String key: accessTracker.keySet()){
+			ArrayList<String> values = accessTracker.get(key);
+			Long lastAccessed = Long.parseLong(values.get(0));
+			Long currentTime = System.currentTimeMillis();
+			int differenceInSeconds = (int)((currentTime - lastAccessed)/1000);
+			if(differenceInSeconds >= 10){
+				accessTracker.remove(key);
+			}
+		}
+	}
+	
+	public void addToCache(String filename, String body){
+		ArrayList<String> values = new ArrayList<String>();
+		values.add(body);
+		values.add(System.currentTimeMillis() + "");
+		cacheDictionary.put(filename, values);
+		System.out.println("Added key to cache: " + filename);
+	}
+	
+	public Map<String, ArrayList<String>> getAccessTracker(){
+		return accessTracker;
+	}
+	
+	public void updateAccessTracker(Map<String, ArrayList<String>> map){
+		accessTracker = map;
+		System.out.println(accessTracker);
+	}
+	
+	public Boolean isCached(String filename){
+		return cacheDictionary.containsKey(filename);
+	}
+	
+	public String getBodyFromCache(String filename){
+		ArrayList<String> attributes = cacheDictionary.get(filename);
+		String body = attributes.get(0);
+		return body;
 	}
 }

@@ -191,5 +191,27 @@ public class HttpResponseFactory {
 
 		return response;
 	}
+	
+	public IHttpResponse createResponseFromCache(String body, String connection, int responseCode){
+		IHttpResponse response = null;
+
+		// Determine response to create based on response code. Default will
+		// return an internal error
+		response = (IHttpResponse) responseMap.get(responseCode);
+		if (response == null) {
+			response = new InternalErrorResponse();
+		}
+
+		// Update the file since all are initiated with a null file
+		response.setBody(body);
+
+		// Lets fill up header fields with more information
+		fillGeneralHeader(response, connection);
+
+		// Add response specific headers
+		response.initiateSpecificHeaders();
+
+		return response;
+	}
 
 }

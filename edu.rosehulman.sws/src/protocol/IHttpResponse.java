@@ -102,4 +102,6 @@ public interface IHttpResponse {
 	@Override
 	public String toString();
 	
+	public void setBody(String body);
+	public String getBody();
 }
