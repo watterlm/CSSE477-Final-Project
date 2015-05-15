@@ -194,12 +194,14 @@ public class HttpRequestFactory {
 			responseFactory.findPlugins();
 			try {
 				String[] uriParts = request.getUri().split("/");
-				if (uriParts.length > 2) {
-
+				System.out.println(uriParts[1]);
+				if (uriParts.length > 2 || responseFactory.hasHandler(request.getMethod(), "/" + uriParts[1])) {
+					System.out.println("Creating Handler");
+					
 					IHandler handler = responseFactory.generateHandler(
 							request.getMethod(),
-							request.getUri().substring(0,
-									request.getUri().indexOf("/", 1)));
+							"/" + uriParts[1]);
+					System.out.println("Created Handler");
 					if (handler != null) {
 						IHttpResponse blankResponse = null;
 
@@ -213,6 +215,7 @@ public class HttpRequestFactory {
 							e.printStackTrace();
 						}
 					} else {
+						System.out.println("Handler was null");
 						IHttpResponse response = responseFactory
 								.createResponse(null, Protocol.CLOSE,
 										Protocol.BAD_REQUEST_CODE);
@@ -242,6 +245,7 @@ public class HttpRequestFactory {
 					}
 				}
 			} catch (Exception e) {
+				System.out.println(e.getMessage());
 				IHttpResponse response = responseFactory.createResponse(null,
 						Protocol.CLOSE, Protocol.INTERNAL_ERROR_CODE);
 				writeResponse(outStream, response);

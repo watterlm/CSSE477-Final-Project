@@ -100,7 +100,6 @@ public class Server implements Runnable {
 		backupSES.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("Backing up");
 				backup();
 			}
 		}, 0, 3, TimeUnit.HOURS);
@@ -110,7 +109,6 @@ public class Server implements Runnable {
 		fileCheckerSES.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("Checking System Files");
 				for (String file : systemFiles){
 					checkFileChangeOrDelete(file);
 				}
@@ -122,7 +120,6 @@ public class Server implements Runnable {
 		cacheCleanerSES.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("Cleaning Cache");
 				cleanCache();
 			}
 		}, 5, 5, TimeUnit.SECONDS);

@@ -87,6 +87,7 @@ public class HttpResponseFactory {
 	}
 
 	public void findPlugins() {
+		classMap.clear();
 		File pluginFolder = new File(pluginDirectory);
 
 		try {
@@ -108,9 +109,9 @@ public class HttpResponseFactory {
 
 					IHandler handler = (IHandler) pluginLoader.loadClass(obj)
 							.newInstance();
-					HashMap hash = new HashMap<String, Object>();
-					hash.put(uri, handler);
-					classMap.put(method, hash);
+					Map<String, IHandler> hash = new HashMap<String, IHandler>();
+					hash.put(method, handler);
+					classMap.put(uri, hash);
 				}
 			}
 		} catch (Exception e) {
@@ -120,9 +121,9 @@ public class HttpResponseFactory {
 	}
 
 	public IHandler generateHandler(String method, String uri) {
-		if (classMap.containsKey(method)
-				&& classMap.get(method).containsKey(uri)) {
-			IHandler handler = classMap.get(method).get(uri);
+		if (classMap.containsKey(uri)
+				&& classMap.get(uri).containsKey(method)) {
+			IHandler handler = classMap.get(uri).get(method);
 			return handler;
 		} else {
 			return null;
@@ -212,6 +213,11 @@ public class HttpResponseFactory {
 		response.initiateSpecificHeaders();
 
 		return response;
+	}
+	
+	public Boolean hasHandler(String method, String uri){
+		return classMap.containsKey(uri)
+				&& classMap.get(uri).containsKey(method);
 	}
 
 }
