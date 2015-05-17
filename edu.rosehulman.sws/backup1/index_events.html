@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" ></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$.ajax({
+				type: "GET",
+				url: "/todayeventscheduler/v1/getEvents
+				contentType: "application/json"
+				dateType: "json"
+				success: function(data) {
+					$('#event_div').prepend('<p>JQuery Test</p>');
+				}
+				console.log("document loaded");
+				});
+				
+			});
+	</script>
+	<style>
+		body { 
+			background: #000000
+		}
+		h1{
+			background: #990000;
+			padding: 10px 10px;
+			margin: 20px auto 0px auto;
+			width: 50%;
+			color:#FFFFFF;
+		}
+		#content {
+			background:#FFFFFF;
+			margin: 0px auto 20px auto;
+			padding: 10px 10px;
+			width:50%;
+		}
+	</style>
+	<title>Events</title>
+</head>
+<body>
+	<h1>Today's Events</h1>
+	<div id="content">
+		<p>Here are today's events:</p>
+		<div id="event_div" style="padding:20px;">
+		</div>
+		
+	</content>
+	
+</body>
+</html>

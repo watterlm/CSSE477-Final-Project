@@ -178,6 +178,7 @@ public class HttpResponseFactory {
 		// return an internal error
 		response = (IHttpResponse) responseMap.get(responseCode);
 		if (response == null) {
+			System.out.println("Response was nul");
 			response = new InternalErrorResponse();
 		}
 

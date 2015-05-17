@@ -55,7 +55,7 @@ public class ServletHandlerResponse {
 	}
 	
 	public void setResponse(IHttpResponse r){
-		
+		System.out.println("Set Response");
 		response = r;
 	}
 	public void write() throws IOException{
