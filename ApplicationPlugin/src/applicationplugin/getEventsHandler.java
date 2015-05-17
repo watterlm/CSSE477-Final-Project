@@ -21,6 +21,7 @@ public class getEventsHandler implements IHandler {
 	@Override
 	public void handle(IHttpRequest request, ServletHandlerResponse servlet,
 			Server server) throws IOException {
+		System.out.println("get events handler");
 		IHttpResponse response;
 		HttpResponseFactory responseFactory = new HttpResponseFactory(server);
 		String path = server.getRootDirectory() + System.getProperty("file.separator") + "web" + System.getProperty("file.separator");
@@ -40,7 +41,7 @@ public class getEventsHandler implements IHandler {
 					
 				}
 			}
-			System.out.println(events.toString());
+			System.out.println("EVENTS:" + events.toString());
 			
 			response = responseFactory.createResponseFromCache(events.toString(), Protocol.CLOSE, Protocol.OK_CODE);
 		}

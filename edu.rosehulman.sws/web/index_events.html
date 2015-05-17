@@ -14,11 +14,26 @@
 					alert(data);
 					$('#event_div').prepend('<p>JQuery Test</p>');
 				}
-				
+				error: function(){
+					console.log("ERROR");
+				}
 				});
 				
 			});
 	</script>
+	
+	<script>
+	function testing()
+	{
+		var xmlhttp = new XMLHttpRequest();
+		document.getElementById("event_div").innerHTML="Sending...";
+		xmlhttp.open("GET","/todayeventscheduler/v1/getEvents",false);
+		xmlhttp.send();
+		document.getElementById("event_div").innerHTML=xmlhttp.responseText;
+		
+	}
+	</script>
+	
 	<style>
 		body { 
 			background: #000000
@@ -43,9 +58,10 @@
 	<h1>Today's Events</h1>
 	<div id="content">
 		<p>Here are today's events:</p>
+		
 		<div id="event_div" style="padding:20px;">
 		</div>
-		
+		<button type="button" onclick="testing()">Test me!</button>
 	</content>
 	
 </body>

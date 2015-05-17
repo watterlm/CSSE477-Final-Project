@@ -23,6 +23,7 @@ public class ApplicationHandler implements IHandler {
 	@Override
 	public void handle(IHttpRequest request, ServletHandlerResponse servlet,
 			Server server) throws IOException {
+		System.out.println("Application handler");
 		IHttpResponse response;
 		HttpResponseFactory responseFactory = new HttpResponseFactory(server);
 		File file = new File(server.getRootDirectory() + System.getProperty("file.separator") + "web" + System.getProperty("file.separator") + "index_events.html");

@@ -250,7 +250,7 @@ public class Server implements Runnable {
 				try {
 					
 					request = requestFactory.read(inStream);
-					System.out.println(request);
+					//System.out.println(request);
 				}
 				catch(ProtocolException pe) {
 					// We have some sort of protocol exception. Get its status code and create response
@@ -282,7 +282,7 @@ public class Server implements Runnable {
 				
 				//System.out.println("IP:"+connectionSocket.getInetAddress().toString());
 				String ip = connectionSocket.getInetAddress().toString();
-				System.out.println(ip);
+				//System.out.println(ip);
 				if(users.containsKey(ip)){
 					System.out.println("old user");
 					User oldUser = users.get(ip);

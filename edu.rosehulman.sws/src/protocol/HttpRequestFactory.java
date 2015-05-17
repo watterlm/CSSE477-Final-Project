@@ -196,7 +196,7 @@ public class HttpRequestFactory {
 				String[] uriParts = request.getUri().split("/");
 				System.out.println(uriParts[1]);
 				if (uriParts.length > 2 || responseFactory.hasHandler(request.getMethod(), "/" + uriParts[1])) {
-					System.out.println("Creating Handler");
+					System.out.println("Creating Handler for request: " + request.getMethod() + "/" + uriParts[1]);
 					
 					IHandler handler = responseFactory.generateHandler(
 							request.getMethod(),
