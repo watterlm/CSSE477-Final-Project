@@ -5,5 +5,5 @@ Bundle-SymbolicName: ApplicationPlugin
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: applicationplugin.Activator
 Import-Package: org.osgi.framework;version="1.3.0"
-pluginList: [{method: "GET",uri: "/todayeventscheduler/v1/landingPage", class: applicationplugin.ApplicationHandler}, {method: "GET",uri: "/todayeventscheduler/v1/getEvents", class: applicationplugin.getEventsHandler}]
+pluginList: [{method: "GET",uri: "/todayeventscheduler/v1/landingPage", class: applicationplugin.ApplicationHandler}, {method: "GET",uri: "/todayeventscheduler/v1/getEvents", class: applicationplugin.getEventsHandler},{method: "POST",uri: "/todayeventscheduler/v1/addEvent", class: applicationplugin.addEventHandler}]
 Require-Bundle: org.eclipse.equinox.common

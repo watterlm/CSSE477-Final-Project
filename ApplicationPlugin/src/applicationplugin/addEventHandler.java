@@ -23,7 +23,7 @@ public class addEventHandler implements IHandler {
 		String path = server.getRootDirectory() + System.getProperty("file.separator") + "web" + System.getProperty("file.separator") + "events" + System.getProperty("file.separator");
 		
 		System.out.println(request.getBody());
-		File file = new File(path + "");
+		//File file = new File(path + "");
 
 		
 //			try{
@@ -39,7 +39,7 @@ public class addEventHandler implements IHandler {
 //				response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
 //			}
 			// File does not exist so lets create 404 file not found code
-			response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
+		response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.OK_CODE);
 		
 		servlet.setResponse(response);
 		try {

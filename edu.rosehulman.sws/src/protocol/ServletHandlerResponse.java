@@ -32,6 +32,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 import server.OutputStreamWrapper;
@@ -59,8 +60,10 @@ public class ServletHandlerResponse {
 		response = r;
 	}
 	public void write() throws IOException{
-		BufferedOutputStream out = new BufferedOutputStream(output, Protocol.CHUNK_LENGTH);
-
+//		BufferedOutputStream out = new BufferedOutputStream(output, Protocol.CHUNK_LENGTH);
+		
+		OutputStream out = output;
+		
 		// First status line
 		String line = response.getVersion() + Protocol.SPACE + response.getStatus() + Protocol.SPACE + response.getPhrase() + Protocol.CRLF;
 		out.write(line.getBytes());

@@ -250,7 +250,6 @@ public class Server implements Runnable {
 				try {
 					
 					request = requestFactory.read(inStream);
-					//System.out.println(request);
 				}
 				catch(ProtocolException pe) {
 					// We have some sort of protocol exception. Get its status code and create response
@@ -262,7 +261,6 @@ public class Server implements Runnable {
 						IHttpResponse response = responseFactory.createResponse(null, Protocol.CLOSE, Protocol.BAD_REQUEST_CODE);
 						try {
 							response.write(outStream);
-//							System.out.println(response);
 						}
 						catch(Exception e){
 							// We will ignore this exception
@@ -273,9 +271,7 @@ public class Server implements Runnable {
 						this.incrementConnections(1);
 						return;
 					}
-					// TODO: Handle version not supported code as well
 				}
-				////////////////////////////
 			
 				// Create a handler for this incoming connection and start the handler in a new thread
 				ConnectionHandler handler = new ConnectionHandler(this, connectionSocket, request);

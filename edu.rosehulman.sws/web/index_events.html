@@ -25,30 +25,18 @@
 		*/
 		
 	}
-	function openAddDialog()
-	{
-		var addWindow = window.open("", "MsgWindow", "width=400, height=400");
-		addWindow.document.clear();
-		addWindow.document.write("<p>Enter the following information to create an event and press submit when finished</p>");
-		my_form = document.createElement('FORM');
-		my_form.name="addEvent";
-		my_form.method="POST";
-		my_form.action="/todayeventscheduler/v1/addEvent";
-		
-		title_label = document.createElement('p');
-		title_label.innerhtml = "Title: ";
-		my_form.appendChild(title_label);
-		
-		
-		
-		my_tb = document.createElement('INPUT');
-		my_tb.type = "TEXT";
-		my_tb.name="title";
-		my_form.appendChild(my_tb);
-		
-		addWindow.document.appendChild(my_form);
-	
-	}
+	function addEvent(){
+	    var title = document.getElementById("title");
+	    var time = document.getElementById("time");
+	    var day = document.getElementById("day");
+	    var location = document.getElementById("location");
+	    var host = document.getElementById("host");
+	    var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("POST","/todayeventscheduler/v1/addEvent",false);
+		xmlhttp.send("title=title&time=time&day=day&location=location&host=host");
+		var response = xmlhttp.response;
+		response = response.split("HTTP")[0]
+	}	
 	</script>
 	
 	<style>
@@ -76,12 +64,18 @@
 	<div id="content">
 		<p>Events:</p>
 		
-		<div id="event_div" style="padding:20px;">
+		<div id="event_div" style="padding:20px">
 		</div>
-		
-		
 		<button type="button" onclick="getEvents()">Get Events</button>
-		<button type="button" onclick="openAddDialog()">Add Event</button>
+
+		<div id="add_div" style="margin-top:10px; padding:20px;">
+			Title: <input type="text" id="title"/> <br /><br />
+			Time: <input type="text" id="time"/> <br /><br />				
+			Day: <input type="text" id="date"/> <br /><br />
+			Location: <input type="text" id="location"/> <br /><br />
+			Host: <input type="text" id="host"/> <br /><br />
+		</div>
+		<button type="button" onclick="addEvent()">Add Event</button>
 	</content>
 	
 </body>
