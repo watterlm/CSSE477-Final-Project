@@ -31,8 +31,6 @@ public class getEventsHandler implements IHandler {
 		if(file.exists() && file.isDirectory()) {
 			JSONParser parser = new JSONParser();
 			File[] listFiles = file.listFiles();
-			//ArrayList<JSONObject> events = new ArrayList<JSONObject>();
-			//String eventsList = "{\"events\": [";
 			String eventsList = "";
 			for (int i=0; i< listFiles.length; i++){
 				
@@ -40,7 +38,6 @@ public class getEventsHandler implements IHandler {
 					Object obj = parser.parse(new FileReader(listFiles[i]));
 					JSONObject jsonObject = (JSONObject) obj;
 					String thisEvent = "";
-					//String xml = XML.toString(jsonObject);
 					
 					thisEvent += "Title: " + jsonObject.get("Title") + "<br/>";
 					thisEvent += "Host: " + jsonObject.get("Host") + "<br/>";
