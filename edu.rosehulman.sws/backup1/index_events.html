@@ -1,35 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" ></script>
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$.ajax({
-				type: "GET",
-				url: "/todayeventscheduler/v1/getEvents",
-				contentType: "application/json",
-				dateType: "json",
-				success: function(data) {
-					console.log("document loaded");
-					alert(data);
-					$('#event_div').prepend('<p>JQuery Test</p>');
-				}
-				error: function(){
-					console.log("ERROR");
-				}
-				});
-				
-			});
-	</script>
-	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js" ></script>	
 	<script>
-	function testing()
+	function getEvents()
 	{
 		var xmlhttp = new XMLHttpRequest();
 		document.getElementById("event_div").innerHTML="Sending...";
 		xmlhttp.open("GET","/todayeventscheduler/v1/getEvents",false);
 		xmlhttp.send();
-		document.getElementById("event_div").innerHTML=xmlhttp.responseText;
+		var response = xmlhttp.response;
+		response = response.split("HTTP")[0]
+		document.getElementById("event_div").innerHTML=response;
+		
+		/*
+		var out = "Events <br/>";
+		var json = JSON.parse(response);
+		out += json + "<br/>";
+		for(var i in json){
+			out += json[i].Title+"<br/>";
+		}
+		out+= "done";
+		document.getElementById("event_div").innerHTML=out;
+		*/
 		
 	}
 	</script>
@@ -61,7 +54,9 @@
 		
 		<div id="event_div" style="padding:20px;">
 		</div>
-		<button type="button" onclick="testing()">Test me!</button>
+		
+		
+		<button type="button" onclick="getEvents()">Test me!</button>
 	</content>
 	
 </body>

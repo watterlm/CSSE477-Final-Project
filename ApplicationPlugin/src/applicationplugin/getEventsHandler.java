@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.XML;
 
 import protocol.HttpResponseFactory;
 import protocol.IHandler;
@@ -30,20 +31,40 @@ public class getEventsHandler implements IHandler {
 		if(file.exists() && file.isDirectory()) {
 			JSONParser parser = new JSONParser();
 			File[] listFiles = file.listFiles();
-			ArrayList<JSONObject> events = new ArrayList<JSONObject>();
+			//ArrayList<JSONObject> events = new ArrayList<JSONObject>();
+			//String eventsList = "{\"events\": [";
+			String eventsList = "";
 			for (int i=0; i< listFiles.length; i++){
+				
 				try {
 					Object obj = parser.parse(new FileReader(listFiles[i]));
 					JSONObject jsonObject = (JSONObject) obj;
-					events.add(jsonObject);
+					String thisEvent = "";
+					//String xml = XML.toString(jsonObject);
 					
+					thisEvent += "Title: " + jsonObject.get("Title") + "<br/>";
+					thisEvent += "Host: " + jsonObject.get("Host") + "<br/>";
+					thisEvent += "Location: " + jsonObject.get("Location") + "<br/>";
+					thisEvent += "Time: " + jsonObject.get("Time") + "<br/>";
+					thisEvent += "Day: " + jsonObject.get("Day") + "<br/>";
+					thisEvent += "<br/>";
+					System.out.println("Event " + i);
+					/*
+					if(i>0)
+						eventsList += ",";
+					eventsList += jsonObject.toString();
+					*/
+					eventsList += thisEvent;
+					//events.add(jsonObject);
+					System.out.println("JSON:" + jsonObject.toString());
 				}catch(Exception e){
-					
+					System.out.println("Error in getEventsHandler:" + e.toString());
 				}
 			}
-			System.out.println("EVENTS:" + events.toString());
+			//eventsList += "]}";
+			System.out.println("EVENTS:" + eventsList);
 			
-			response = responseFactory.createResponseFromCache(events.toString(), Protocol.CLOSE, Protocol.OK_CODE);
+			response = responseFactory.createResponseFromCache(eventsList.toString(), Protocol.CLOSE, Protocol.OK_CODE);
 		}
 		else {
 			// File does not exist so lets create 404 file not found code
