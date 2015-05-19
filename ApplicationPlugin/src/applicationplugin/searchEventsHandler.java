@@ -26,7 +26,6 @@ public class searchEventsHandler implements IHandler {
 		
 		//System.out.println("REQUEST: \n" + request.toString());
 		String searchTerm = "";
-		String searchField = "Title";
 		try{
 			searchTerm = request.getHeader().get("searchterm");
 		}

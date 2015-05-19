@@ -22,7 +22,17 @@ public class deleteEventsHandler implements IHandler {
 	@Override
 	public void handle(IHttpRequest request, ServletHandlerResponse servlet,
 			Server server) throws IOException {
-		System.out.println("get events handler");
+		System.out.println("delete events handler");
+		//System.out.println("REQUEST: \n" + request.toString());
+		String searchTerm = "";
+		try{
+			searchTerm = request.getHeader().get("searchterm");
+		}
+		catch(Exception e){
+			searchTerm = "";
+			System.out.println("Error getting search term!");
+		}
+		System.out.println("Search Term: [" + searchTerm+ "]");
 		IHttpResponse response;
 		HttpResponseFactory responseFactory = new HttpResponseFactory(server);
 		String path = server.getRootDirectory() + System.getProperty("file.separator") + "web" + System.getProperty("file.separator");
@@ -35,7 +45,9 @@ public class deleteEventsHandler implements IHandler {
 			for (int i=0; i< listFiles.length; i++){
 				
 				try {
-					Object obj = parser.parse(new FileReader(listFiles[i]));
+					FileReader reader = new FileReader(listFiles[i]);
+					Object obj = parser.parse(reader);
+					reader.close();
 					JSONObject jsonObject = (JSONObject) obj;
 					String thisEvent = "";
 					
@@ -45,23 +57,35 @@ public class deleteEventsHandler implements IHandler {
 					thisEvent += "Time: " + jsonObject.get("Time") + "<br/>";
 					thisEvent += "Day: " + jsonObject.get("Day") + "<br/>";
 					thisEvent += "<br/>";
-					System.out.println("Event " + i);
+					if(thisEvent.contains(searchTerm))
+					{
+						System.out.print("Deleting file...");
+						if(listFiles[i].delete())
+							System.out.println("Done!");
+						else{
+							System.out.println("Failed!");
+						}
+					}
+					else{
+						eventsList+=thisEvent;
+					}
+					//System.out.println("Event " + i);
 					/*
 					if(i>0)
 						eventsList += ",";
 					eventsList += jsonObject.toString();
 					*/
-					eventsList += thisEvent;
+					//eventsList += thisEvent;
 					//events.add(jsonObject);
 					System.out.println("JSON:" + jsonObject.toString());
 				}catch(Exception e){
-					System.out.println("Error in getEventsHandler:" + e.toString());
+					System.out.println("Error in deleteEventsHandler:" + e.toString());
 				}
 			}
 			//eventsList += "]}";
 			System.out.println("EVENTS:" + eventsList);
 			
-			response = responseFactory.createResponseFromCache(eventsList.toString(), Protocol.CLOSE, Protocol.OK_CODE);
+			response = responseFactory.createResponseFromCache(eventsList, Protocol.CLOSE, Protocol.OK_CODE);
 		}
 		else {
 			// File does not exist so lets create 404 file not found code
