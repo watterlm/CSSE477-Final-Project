@@ -23,7 +23,6 @@ public class deleteEventsHandler implements IHandler {
 	public void handle(IHttpRequest request, ServletHandlerResponse servlet,
 			Server server) throws IOException {
 		System.out.println("delete events handler");
-		//System.out.println("REQUEST: \n" + request.toString());
 		String searchTerm = "";
 		try{
 			searchTerm = request.getHeader().get("searchterm");
@@ -52,7 +51,7 @@ public class deleteEventsHandler implements IHandler {
 					String thisEvent = "";
 					
 					thisEvent += "Title: " + jsonObject.get("Title") + "<br/>";
-					thisEvent += "Host: " + jsonObject.get("Host") + "<br/>";
+					thisEvent += "Host: " + jsonObject.get("Event_host") + "<br/>";
 					thisEvent += "Location: " + jsonObject.get("Location") + "<br/>";
 					thisEvent += "Time: " + jsonObject.get("Time") + "<br/>";
 					thisEvent += "Day: " + jsonObject.get("Day") + "<br/>";
@@ -69,20 +68,11 @@ public class deleteEventsHandler implements IHandler {
 					else{
 						eventsList+=thisEvent;
 					}
-					//System.out.println("Event " + i);
-					/*
-					if(i>0)
-						eventsList += ",";
-					eventsList += jsonObject.toString();
-					*/
-					//eventsList += thisEvent;
-					//events.add(jsonObject);
 					System.out.println("JSON:" + jsonObject.toString());
 				}catch(Exception e){
 					System.out.println("Error in deleteEventsHandler:" + e.toString());
 				}
 			}
-			//eventsList += "]}";
 			System.out.println("EVENTS:" + eventsList);
 			
 			response = responseFactory.createResponseFromCache(eventsList, Protocol.CLOSE, Protocol.OK_CODE);

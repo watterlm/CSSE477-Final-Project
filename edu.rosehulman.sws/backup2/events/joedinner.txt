@@ -1,6 +1,6 @@
 {
 	
-	"Event_host": "Joe",
+	"Host": "Joe",
 	"Title" : "Dinner",
 	"Location" : "Jimmy's Diner",
 	"Time" : "17:00",

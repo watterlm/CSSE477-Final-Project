@@ -40,7 +40,7 @@ public class getEventsHandler implements IHandler {
 					String thisEvent = "";
 					
 					thisEvent += "Title: " + jsonObject.get("Title") + "<br/>";
-					thisEvent += "Host: " + jsonObject.get("Host") + "<br/>";
+					thisEvent += "Host: " + jsonObject.get("Event_host") + "<br/>";
 					thisEvent += "Location: " + jsonObject.get("Location") + "<br/>";
 					thisEvent += "Time: " + jsonObject.get("Time") + "<br/>";
 					thisEvent += "Day: " + jsonObject.get("Day") + "<br/>";

@@ -53,8 +53,8 @@ public class OutputStreamWrapper extends OutputStream{
 		out.write(b);
 	}
 
-	public void writeHeader(byte[] b) throws IOException{
-		out.write(b);
-		hasWrittenHeader = true;
-	}
+//	public void writeHeader(byte[] b) throws IOException{
+//		out.write(b);
+//		hasWrittenHeader = true;
+//	}
 }

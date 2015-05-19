@@ -35,14 +35,44 @@
 		document.getElementById("event_div").innerHTML=response;
 	}
 	function addEvent(){
-	    var title = document.getElementById("title");
-	    var time = document.getElementById("time");
-	    var day = document.getElementById("day");
-	    var location = document.getElementById("location");
-	    var host = document.getElementById("host");
+	    var title = $('#title').val();
+	    var time = $('#time').val();
+	    var day = $('#day').val();
+	    var location = $('#location').val();
+	    var event_host = $('#event_host').val();
 	    var xmlhttp = new XMLHttpRequest();
 		xmlhttp.open("POST","/todayeventscheduler/v1/addEvent",false);
-		xmlhttp.send("title=title&time=time&day=day&location=location&host=host");
+		xmlhttp.setRequestHeader("Title", title);
+		xmlhttp.setRequestHeader("Time", time);
+		xmlhttp.setRequestHeader("Day", day);
+		xmlhttp.setRequestHeader("Location", location);
+		xmlhttp.setRequestHeader("Event_host", event_host);
+		xmlhttp.send();
+		
+		var response = xmlhttp.response;
+		response = response.split("HTTP")[0]
+	}	
+	
+	
+	function editEvent(){
+	    var title = $('#title').val();
+	    var time = $('#time').val();
+	    var day = $('#day').val();
+	    var location = $('#location').val();
+	    var event_host = $('#event_host').val();
+	    var orig_host = $('#orig_host').val();
+	    var orig_title = $('#orig_title').val();
+	    var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("POST","/todayeventscheduler/v1/addEvent",false);
+		xmlhttp.setRequestHeader("Title", title);
+		xmlhttp.setRequestHeader("Time", time);
+		xmlhttp.setRequestHeader("Day", day);
+		xmlhttp.setRequestHeader("Location", location);
+		xmlhttp.setRequestHeader("Event_host", event_host);
+		xmlhttp.setRequestHeader("Original_host", orig_host);
+		xmlhttp.setRequestHeader("Original_title", orig_title);
+		xmlhttp.send();
+		
 		var response = xmlhttp.response;
 		response = response.split("HTTP")[0]
 	}	
@@ -77,14 +107,17 @@
 		</div>
 		<button type="button" onclick="getEvents()">Get Events</button>
 
-		<div id="add_div" style="margin-top:10px; padding:20px;">
+		<div style="margin-top:10px; padding:20px;">
+			Original Title (only if editing): <input type="text" id="orig_title"/> <br /><br />
+			Original Host (only if editing): <input type="text" id="orig_host"/> <br /><br />
 			Title: <input type="text" id="title"/> <br /><br />
 			Time: <input type="text" id="time"/> <br /><br />				
-			Day: <input type="text" id="date"/> <br /><br />
+			Day: <input type="text" id="day"/> <br /><br />
 			Location: <input type="text" id="location"/> <br /><br />
-			Host: <input type="text" id="host"/> <br /><br />
+			Host: <input type="text" id="event_host"/> <br /><br />
 		</div>
 		<button type="button" onclick="addEvent()">Add Event</button>
+		<button type="button" onclick="editEvent()">Edit Event</button>
 		<div style="padding:20px">
 		</div>
 		<div>

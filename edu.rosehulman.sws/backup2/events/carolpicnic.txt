@@ -1,6 +1,6 @@
 {
 	
-	"Event_host": "Carol",
+	"Host": "Carol",
 	"Title" : "Picnic",
 	"Location" : "Park",
 	"Time" : "11:00",

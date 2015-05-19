@@ -1,12 +1,10 @@
 package applicationplugin;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import protocol.HttpResponseFactory;
 import protocol.IHandler;
@@ -16,7 +14,7 @@ import protocol.Protocol;
 import protocol.ServletHandlerResponse;
 import server.Server;
 
-public class addEventHandler implements IHandler {
+public class editEventHandler implements IHandler {
 
 	@Override
 	public void handle(IHttpRequest request, ServletHandlerResponse servlet,
@@ -32,12 +30,16 @@ public class addEventHandler implements IHandler {
 		String day = "";
 		String location = "";
 		String eventHost = "";
+		String original_title = "";
+		String original_host = "";
 		try{
 			title = request.getHeader().get("Title");
 			time = request.getHeader().get("Time");
 			day = request.getHeader().get("Day");
 			location = request.getHeader().get("Location");
 			eventHost = request.getHeader().get("Event_host");
+			original_title = request.getHeader().get("Orig_title");
+			original_host = request.getHeader().get("Orig_host");
 		}
 		catch(Exception e){
 			
@@ -51,16 +53,15 @@ public class addEventHandler implements IHandler {
 		event.put("Location", location);
 		event.put("Event_host", eventHost);
 		
-		File file = new File(path + eventHost.toString().toLowerCase() + title.toString().toLowerCase());
+		File file = new File(path + original_host.toString().toLowerCase() + original_title.toString().toLowerCase());
 //		
 		try{
 			if (file.exists()){
-				file.delete();
+				FileWriter writer = new FileWriter(file,false);
+				writer.write(event.toJSONString());
+				writer.close();
 			}
-			file.createNewFile();
-			FileWriter writer = new FileWriter(file,false);
-			writer.write(event.toJSONString());
-			writer.close();
+			
 		}
 		catch(IOException e){
 			System.out.println(e.getMessage());
