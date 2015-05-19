@@ -13,18 +13,18 @@
 		response = response.split("HTTP")[0]
 		document.getElementById("event_div").innerHTML=response;
 		
-		/*
-		var out = "Events <br/>";
-		var json = JSON.parse(response);
-		out += json + "<br/>";
-		for(var i in json){
-			out += json[i].Title+"<br/>";
-		}
-		out+= "done";
-		document.getElementById("event_div").innerHTML=out;
-		*/
-		
 	}
+	function searchEvent(){
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET","/todayeventscheduler/v1/search",false);
+		var search = document.getElementById("searchterm").val();
+		xmlhttp.setRequestHeader("searchterm",search );
+		xmlhttp.send();
+		var response = xmlhttp.response;
+		response = response.split("HTTP")[0]
+		document.getElementById("event_div").innerHTML=response;
+	}
+	
 	function addEvent(){
 	    var title = document.getElementById("title");
 	    var time = document.getElementById("time");
@@ -76,6 +76,12 @@
 			Host: <input type="text" id="host"/> <br /><br />
 		</div>
 		<button type="button" onclick="addEvent()">Add Event</button>
+		<div style="padding:20px">
+		</div>
+		<div>
+			Search: <input type="text" id="searchterm"><br/>
+		</div>
+		<button type="button" onclick="searchEvent()">Search Event</button>
 	</content>
 	
 </body>
