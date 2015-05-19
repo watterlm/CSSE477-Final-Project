@@ -9,5 +9,6 @@ pluginList: [{method: "GET",uri: "/todayeventscheduler/v1/landingPage", class: a
   {method: "GET",uri: "/todayeventscheduler/v1/search", class: applicationplugin.searchEventsHandler},
   {method: "DELETE",uri: "/todayeventscheduler/v1/delete", class: applicationplugin.deleteEventsHandler},
   {method: "GET",uri: "/todayeventscheduler/v1/getEvents", class: applicationplugin.getEventsHandler},
-  {method: "POST",uri: "/todayeventscheduler/v1/addEvent", class: applicationplugin.addEventHandler}] 
+  {method: "POST",uri: "/todayeventscheduler/v1/addEvent", class: applicationplugin.addEventHandler},
+  {method: "PUT", uri: "/todayeventscheduler/v1/editEvent", class: applicationplugin.editEventHandler}] 
 Require-Bundle: org.eclipse.equinox.common

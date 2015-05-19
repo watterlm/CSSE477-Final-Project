@@ -42,15 +42,16 @@
 	    var event_host = $('#event_host').val();
 	    var xmlhttp = new XMLHttpRequest();
 		xmlhttp.open("POST","/todayeventscheduler/v1/addEvent",false);
-		xmlhttp.setRequestHeader("Title", title);
-		xmlhttp.setRequestHeader("Time", time);
-		xmlhttp.setRequestHeader("Day", day);
-		xmlhttp.setRequestHeader("Location", location);
-		xmlhttp.setRequestHeader("Event_host", event_host);
+		xmlhttp.setRequestHeader("title", title);
+		xmlhttp.setRequestHeader("time", time);
+		xmlhttp.setRequestHeader("day", day);
+		xmlhttp.setRequestHeader("location", location);
+		xmlhttp.setRequestHeader("event_host", event_host);
 		xmlhttp.send();
 		
 		var response = xmlhttp.response;
 		response = response.split("HTTP")[0]
+		document.getElementById("event_div").innerHTML=response;
 	}	
 	
 	
@@ -63,18 +64,19 @@
 	    var orig_host = $('#orig_host').val();
 	    var orig_title = $('#orig_title').val();
 	    var xmlhttp = new XMLHttpRequest();
-		xmlhttp.open("POST","/todayeventscheduler/v1/addEvent",false);
-		xmlhttp.setRequestHeader("Title", title);
-		xmlhttp.setRequestHeader("Time", time);
-		xmlhttp.setRequestHeader("Day", day);
-		xmlhttp.setRequestHeader("Location", location);
-		xmlhttp.setRequestHeader("Event_host", event_host);
-		xmlhttp.setRequestHeader("Original_host", orig_host);
-		xmlhttp.setRequestHeader("Original_title", orig_title);
+		xmlhttp.open("PUT","/todayeventscheduler/v1/editEvent",false);
+		xmlhttp.setRequestHeader("title", title);
+		xmlhttp.setRequestHeader("time", time);
+		xmlhttp.setRequestHeader("day", day);
+		xmlhttp.setRequestHeader("location", location);
+		xmlhttp.setRequestHeader("event_host", event_host);
+		xmlhttp.setRequestHeader("original_host", orig_host);
+		xmlhttp.setRequestHeader("original_title", orig_title);
 		xmlhttp.send();
 		
 		var response = xmlhttp.response;
 		response = response.split("HTTP")[0]
+		document.getElementById("event_div").innerHTML=response;
 	}	
 	</script>
 	
